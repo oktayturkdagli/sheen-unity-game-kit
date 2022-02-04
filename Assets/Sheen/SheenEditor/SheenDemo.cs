@@ -14,14 +14,12 @@ public class SheenDemo : MonoBehaviour
     {
         Instantiate(obj, spawnPoint, Quaternion.identity);
     }
-}
 
+}
 
 [CustomEditor(typeof(SheenDemo))]
 public class SheenDemoEditor : SheenEditor
 {
-
-
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
@@ -32,8 +30,38 @@ public class SheenDemoEditor : SheenEditor
         }
         EditorGUILayout.HelpBox("This is a help box", MessageType.Info);
 
-
-
     }
+
+}
+
+public class SheenDemoInspector : EditorWindow
+{
+    //----
+    string myString = "Hello World";
+    bool groupEnabled;
+    bool myBool = true;
+    float myFloat = 1.23f;
+    //----
+
+    [MenuItem("Window/Sheen/Sheen Demo")]
+    public static void ShowWindow()
+    {
+        EditorWindow.GetWindow(typeof(SheenDemoInspector));
+    }
+
+    void OnGUI()
+    {
+        var editor = Editor.CreateEditor(Selection.activeGameObject.GetComponent<SheenDemo>());
+        editor.OnInspectorGUI();
+
+        GUILayout.Label("Base Settings", EditorStyles.boldLabel);
+        myString = EditorGUILayout.TextField("Text Field", myString);
+
+        groupEnabled = EditorGUILayout.BeginToggleGroup("Optional Settings", groupEnabled);
+        myBool = EditorGUILayout.Toggle("Toggle", myBool);
+        myFloat = EditorGUILayout.Slider("Slider", myFloat, -3, 3);
+        EditorGUILayout.EndToggleGroup();
+    }
+
 
 }
