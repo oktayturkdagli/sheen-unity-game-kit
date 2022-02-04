@@ -22,7 +22,7 @@ public class SheenDemo2 : EditorWindow
         GUILayout.Box(texture2);
 
 
-        GUI.DrawTexture(new Rect(10, 10, 60, 60), texture1, ScaleMode.ScaleToFit, true, 10.0F);
+        GUI.DrawTexture(new Rect(10, 250, 60, 60), texture1, ScaleMode.StretchToFill, true, 0f);
 
         GUILayout.Label("Costumize", EditorStyles.boldLabel);
 
