@@ -8,6 +8,10 @@ public class SheenInputController : EditorWindow
     Texture[] toolbarTextures, touchpadTextures;
     float referenceDPI = 200f, tapTreshold = 0.2f, swipeTreshold = 100f;
 
+    bool toogleGroup1Enable = false;
+    bool isThereJoystickCenter = true;
+    float JoystickOutRange = 2;
+
     [MenuItem("Window/Sheen/Sheen Input Controller")]
     public static void Init()
     {
@@ -71,18 +75,20 @@ public class SheenInputController : EditorWindow
         GUILayout.BeginVertical(GUILayout.Height(110)); GUILayout.FlexibleSpace();
         bool button3 = GUILayout.Button(touchpadTextures[0], GUILayout.Width(25), GUILayout.Height(25));
         GUILayout.FlexibleSpace(); GUILayout.EndVertical();
-
         GUILayout.BeginVertical();
         GUILayout.Box("   Knob  ");
         GUILayout.Box(touchpadTextures[3], GUILayout.Width(50), GUILayout.Height(50));
         GUILayout.EndVertical();
-        
         GUILayout.BeginVertical(GUILayout.Height(110)); GUILayout.FlexibleSpace();
         bool button4 = GUILayout.Button(touchpadTextures[1], GUILayout.Width(25), GUILayout.Height(25));
         GUILayout.FlexibleSpace(); GUILayout.EndVertical();
-
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
+
+        toogleGroup1Enable = EditorGUILayout.BeginToggleGroup("Optional Settings", toogleGroup1Enable);
+        isThereJoystickCenter = EditorGUILayout.Toggle("Joystick Center", isThereJoystickCenter);
+        JoystickOutRange = EditorGUILayout.Slider("Outrange", JoystickOutRange, 0, 10);
+        EditorGUILayout.EndToggleGroup();
 
         if (button1)
         {
@@ -105,20 +111,7 @@ public class SheenInputController : EditorWindow
 
     void ControlKeyboard()
     {
-        string myString = "Hello World";
-        bool groupEnabled = false;
-        bool myBool = true;
-        float myFloat = 1.23f;
-
-        EditorGUILayout.BeginHorizontal();
-        myString = EditorGUILayout.TextField("Text Field", myString);
-        EditorGUILayout.EndHorizontal();
-
-
-        groupEnabled = EditorGUILayout.BeginToggleGroup("Optional Settings", groupEnabled);
-        myBool = EditorGUILayout.Toggle("Toggle", myBool);
-        myFloat = EditorGUILayout.Slider("Slider", myFloat, -3, 3);
-        EditorGUILayout.EndToggleGroup();
+        
 
     }
 
