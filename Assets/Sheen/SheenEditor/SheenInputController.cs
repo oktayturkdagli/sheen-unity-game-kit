@@ -5,12 +5,15 @@ using System.Collections.Generic;
 public class SheenInputController : EditorWindow
 {
     int selectedToolbarIndex = 0;
-    Texture[] toolbarTextures, touchpadTextures;
+    Texture[] standartTextures, toolbarTextures, touchpadTextures;
     float referenceDPI = 200f, tapTreshold = 0.2f, swipeTreshold = 100f;
-
-    bool toogleGroup1Enable = false;
-    bool isThereJoystickCenter = true;
+    
+    bool joystickEnable = false;
     float JoystickOutRange = 2;
+
+    bool optionalSettingsEnable = false;
+    bool optionalToggle1 = true;
+    string optionalTextField1 = "Optional text";
 
     [MenuItem("Window/Sheen/Sheen Input Controller")]
     public static void Init()
@@ -39,56 +42,54 @@ public class SheenInputController : EditorWindow
 
     void ControlTouchPad()
     {
+        //Standart
         EditorGUILayout.Space();
         GUILayout.Label("Touch Controller", EditorStyles.boldLabel);
-        referenceDPI = EditorGUILayout.FloatField("Reference DPI: ", referenceDPI);
-        tapTreshold = EditorGUILayout.FloatField("Tap Treshold: ", tapTreshold);
-        swipeTreshold = EditorGUILayout.FloatField("Swipe Treshold: ", swipeTreshold);
-
+        referenceDPI = EditorGUILayout.FloatField("Reference DPI", referenceDPI);
+        tapTreshold = EditorGUILayout.FloatField("Tap Treshold", tapTreshold);
+        swipeTreshold = EditorGUILayout.FloatField("Swipe Treshold", swipeTreshold);
         EditorGUILayout.Space(); EditorGUILayout.Space();
-        GUILayout.Label("Customize", EditorStyles.boldLabel);
 
+        //Joystick
+        joystickEnable = EditorGUILayout.BeginToggleGroup("Joystick", joystickEnable);
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
-        
-        GUILayout.BeginVertical(GUILayout.Height(110));GUILayout.FlexibleSpace();
+        GUILayout.BeginVertical(GUILayout.Height(65));GUILayout.FlexibleSpace();
         bool button1 = GUILayout.Button(touchpadTextures[0], GUILayout.Width(25), GUILayout.Height(25));
-        GUILayout.FlexibleSpace();GUILayout.EndVertical();
-
+        GUILayout.EndVertical();
         GUILayout.BeginVertical();
         GUILayout.Box(" Center ");
         GUILayout.Box(touchpadTextures[2], GUILayout.Width(50), GUILayout.Height(50));
         GUILayout.EndVertical();
-
-        GUILayout.BeginVertical(GUILayout.Height(110)); GUILayout.FlexibleSpace();
+        GUILayout.BeginVertical(GUILayout.Height(65)); GUILayout.FlexibleSpace();
         bool button2 = GUILayout.Button(touchpadTextures[1], GUILayout.Width(25), GUILayout.Height(25));
-        GUILayout.FlexibleSpace(); GUILayout.EndVertical();
-
+        GUILayout.EndVertical();
         GUILayout.FlexibleSpace();
-        //GUILayout.FlexibleSpace();
-        //GUILayout.BeginVertical();
-        //GUILayout.Box("  Result ");
-        //GUILayout.Box(touchpadTextures[3], GUILayout.Width(50), GUILayout.Height(50));
-        //GUILayout.EndVertical();
-        //GUILayout.FlexibleSpace();
-
-        GUILayout.BeginVertical(GUILayout.Height(110)); GUILayout.FlexibleSpace();
+        GUILayout.BeginVertical(GUILayout.Height(65)); GUILayout.FlexibleSpace();
         bool button3 = GUILayout.Button(touchpadTextures[0], GUILayout.Width(25), GUILayout.Height(25));
-        GUILayout.FlexibleSpace(); GUILayout.EndVertical();
+        GUILayout.EndVertical();
         GUILayout.BeginVertical();
         GUILayout.Box("   Knob  ");
         GUILayout.Box(touchpadTextures[3], GUILayout.Width(50), GUILayout.Height(50));
         GUILayout.EndVertical();
-        GUILayout.BeginVertical(GUILayout.Height(110)); GUILayout.FlexibleSpace();
+        GUILayout.BeginVertical(GUILayout.Height(65)); GUILayout.FlexibleSpace();
         bool button4 = GUILayout.Button(touchpadTextures[1], GUILayout.Width(25), GUILayout.Height(25));
-        GUILayout.FlexibleSpace(); GUILayout.EndVertical();
+        GUILayout.EndVertical();
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-
-        toogleGroup1Enable = EditorGUILayout.BeginToggleGroup("Optional Settings", toogleGroup1Enable);
-        isThereJoystickCenter = EditorGUILayout.Toggle("Joystick Center", isThereJoystickCenter);
+        EditorGUILayout.Space();
+        GUILayout.BeginHorizontal();
         JoystickOutRange = EditorGUILayout.Slider("Outrange", JoystickOutRange, 0, 10);
+        GUILayout.EndHorizontal();
         EditorGUILayout.EndToggleGroup();
+        EditorGUILayout.Space(); EditorGUILayout.Space();
+
+        //Optional Settings
+        optionalSettingsEnable = EditorGUILayout.BeginToggleGroup("Optional Settings", optionalSettingsEnable);
+        optionalToggle1 = EditorGUILayout.Toggle("Toggle 1", optionalToggle1);
+        optionalTextField1 = EditorGUILayout.TextField("Text", optionalTextField1);
+        EditorGUILayout.EndToggleGroup();
+        EditorGUILayout.Space(); EditorGUILayout.Space();
 
         if (button1)
         {
@@ -106,7 +107,7 @@ public class SheenInputController : EditorWindow
         {
             Debug.Log("Button4 clicked");
         }
-        
+
     }
 
     void ControlKeyboard()
@@ -142,6 +143,9 @@ public class SheenInputController : EditorWindow
     {
         //if (toolbarTextures == null)
         //{
+            standartTextures = new Texture[1];
+            standartTextures[0] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_touch_black.png", typeof(Texture));
+
             toolbarTextures = new Texture[3];
             toolbarTextures[0] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_touch_black.png", typeof(Texture));
             toolbarTextures[1] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_keyboard_black.png", typeof(Texture));
@@ -152,7 +156,6 @@ public class SheenInputController : EditorWindow
             touchpadTextures[1] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/arrow_right_black.png", typeof(Texture));
             touchpadTextures[2] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_center_1.png", typeof(Texture));
             touchpadTextures[3] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_knob_1.png", typeof(Texture));
-
         //}
     }
 
