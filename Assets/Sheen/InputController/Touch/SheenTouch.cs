@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.UI;
 
 namespace Sheen.Touch
 {
@@ -17,11 +16,16 @@ namespace Sheen.Touch
         public static SheenTouch instance; //Contains all the active and enabled SheenTouch instances
         public static List<SheenFinger> fingers = new List<SheenFinger>(10); //Contains all fingers currently touching the screen (or have just stopped touching the screen)
         public static List<SheenFinger> inactiveFingers = new List<SheenFinger>(10); //contains all fingers that were once touching the screen. This is used to manage finger tapping
-        
+        string scriptableObjectName = "InputControllerSO";
 
         //INSTANCE, TRESHOLDS, DEFAULT DPI, DEFAULT GUI LAYER
         //The First active and enabled SheenTouch instance
         public static SheenTouch Instance { get { return instance; } }
+
+        //Allows you to set the default DPI you want the input scaling to be based on
+        [SerializeField] private float referenceDpi = DEFAULT_REFERENCE_DPI;
+        public float ReferenceDpi { set { referenceDpi = value; } get { return referenceDpi; } }
+        public static float CurrentReferenceDpi { get { return instance != null ? instance.referenceDpi : DEFAULT_REFERENCE_DPI; } }
 
         //Allows you to set how many seconds are required between a finger down/up for a tap to be registered
         [SerializeField] private float tapThreshold = DEFAULT_TAP_THRESHOLD;
@@ -32,13 +36,7 @@ namespace Sheen.Touch
         [SerializeField] private float swipeThreshold = DEFAULT_SWIPE_THRESHOLD;
         public float SwipeThreshold { set { swipeThreshold = value; } get { return swipeThreshold; } }
         public static float CurrentSwipeThreshold { get { return instance != null ? instance.swipeThreshold : DEFAULT_SWIPE_THRESHOLD; } }
-
-
-        //Allows you to set the default DPI you want the input scaling to be based on
-        [SerializeField] private int referenceDpi = DEFAULT_REFERENCE_DPI;
-        public int ReferenceDpi { set { referenceDpi = value; } get { return referenceDpi; } }
-        public static int CurrentReferenceDpi { get { return instance != null ? instance.referenceDpi : DEFAULT_REFERENCE_DPI; } }
-
+        
         //If you disable this then Sheen touch will act as if you stopped touching the screen.
         [SerializeField] private bool useTouch = true;
         public bool UseTouch { set { useTouch = value; } get { return useTouch; } }
@@ -85,6 +83,7 @@ namespace Sheen.Touch
         protected virtual void OnEnable()
         {
             instance = this;
+            LoadValuesFromScriptableObject(scriptableObjectName);
         }
 
         protected virtual void OnDisable()
@@ -146,7 +145,6 @@ namespace Sheen.Touch
                 }
             }
         }
-
         
         //Update events of all Fingers
         private void UpdateEvents()
@@ -218,9 +216,18 @@ namespace Sheen.Touch
                     }
                 }
             }
-        }  
+        }
 
-        
+        void LoadValuesFromScriptableObject(string soName)
+        {
+            InputControllerSOC existingSO = (InputControllerSOC)Resources.Load<InputControllerSOC>(soName);
+            if (existingSO)
+            {
+                referenceDpi = existingSO.referenceDpi;
+                tapThreshold = existingSO.tapThreshold;
+                swipeThreshold = existingSO.swipeThreshold;
+            }
+        }
     }
 
 

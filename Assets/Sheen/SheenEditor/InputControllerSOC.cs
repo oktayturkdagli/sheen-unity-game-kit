@@ -2,9 +2,9 @@
 
 public class InputControllerSOC : ScriptableObject
 {
-    public float referenceDpi;
-    public float tapTreshold;
-    public float swipeTreshold;
+    [SerializeField] public float referenceDpi;
+    [SerializeField] public float tapThreshold;
+    [SerializeField] public float swipeThreshold;
 
-    public bool useJoystick;
+    [SerializeField] public bool useJoystick;
 }

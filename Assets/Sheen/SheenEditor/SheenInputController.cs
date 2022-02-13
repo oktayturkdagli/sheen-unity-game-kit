@@ -1,13 +1,13 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
+using Sheen.Touch;
 
 public class SheenInputController : EditorWindow
 {
     int selectedToolbarIndex = 0;
     Texture[] standartTextures, toolbarTextures, touchpadTextures;
     bool isFirstOpen = true;
-    float referenceDpi = 200f, tapTreshold = 0.2f, swipeTreshold = 100f;
+    float referenceDpi = 200f, tapThreshold = 0.2f, swipeThreshold = 100f;
 
     bool joystickEnable = false;
     float JoystickOutRange = 2;
@@ -17,6 +17,7 @@ public class SheenInputController : EditorWindow
     string optionalTextField1 = "Optional text";
 
     string scriptableObjectName = "InputControllerSO";
+    string prefabName = "SheenTouch";
 
     [MenuItem("Window/Sheen/Sheen Input Controller")]
     public static void Init()
@@ -38,10 +39,10 @@ public class SheenInputController : EditorWindow
                 ControlTouchPad();
                 break;
             case 1:
-                ControlKeyboard();
+                Debug.Log("This part is not ready yet :)");
                 break;
             case 2:
-                ControlGamePad();
+                Debug.Log("This part is not ready yet :)");
                 break;
         }
 
@@ -53,10 +54,8 @@ public class SheenInputController : EditorWindow
         GUILayout.EndHorizontal();
         if (buttonBuild)
         {
-            Debug.Log("Button Build clicked");
-            //Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Sheen/InputController/SheenTouch.prefab", typeof(GameObject));
-            //PrefabUtility.InstantiatePrefab(prefab);
             CreateScriptableObject(scriptableObjectName);
+            CreatePrefab(prefabName);
         }
     }
 
@@ -66,8 +65,8 @@ public class SheenInputController : EditorWindow
         EditorGUILayout.Space();
         GUILayout.Label("Touch Controller", EditorStyles.boldLabel);
         referenceDpi = EditorGUILayout.FloatField("Reference DPI", referenceDpi);
-        tapTreshold = EditorGUILayout.FloatField("Tap Treshold", tapTreshold);
-        swipeTreshold = EditorGUILayout.FloatField("Swipe Treshold", swipeTreshold);
+        tapThreshold = EditorGUILayout.FloatField("Tap Treshold", tapThreshold);
+        swipeThreshold = EditorGUILayout.FloatField("Swipe Treshold", swipeThreshold);
         EditorGUILayout.Space(); EditorGUILayout.Space();
 
         //Joystick
@@ -130,35 +129,6 @@ public class SheenInputController : EditorWindow
 
     }
 
-    void ControlKeyboard()
-    {
-        
-
-    }
-
-    void ControlGamePad()
-    {
-        EditorGUILayout.BeginHorizontal();
-        bool button1 = GUILayout.Button("button1", GUILayout.ExpandWidth(true));
-        bool button2 = GUILayout.Button("button2", GUILayout.ExpandWidth(true));
-        bool button3 = GUILayout.Button("button3", GUILayout.ExpandWidth(true));
-        EditorGUILayout.EndHorizontal();
-
-        if (button1)
-        {
-            Debug.Log("Button1 clicked");
-        }
-        else if (button2)
-        {
-            Debug.Log("Button2 clicked");
-        }
-        else if (button3)
-        {
-            Debug.Log("Button3 clicked");
-        }
-
-    }
-
     void FirstOpen()
     {
         TakeTextures();
@@ -183,20 +153,31 @@ public class SheenInputController : EditorWindow
             touchpadTextures[3] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_knob_1.png", typeof(Texture));
     }
 
+    void LoadValuesFromScriptableObject(string soName)
+    {
+        InputControllerSOC existingSO = (InputControllerSOC)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Resources/" + soName + ".asset", typeof(ScriptableObject));
+        if (existingSO)
+        {
+            referenceDpi = existingSO.referenceDpi;
+            tapThreshold = existingSO.tapThreshold;
+            swipeThreshold = existingSO.swipeThreshold;
+        }
+    }
+    
     void CreateScriptableObject(string soName)
     {
-        InputControllerSOC existingSO = (InputControllerSOC)AssetDatabase.LoadAssetAtPath("Assets/Sheen/InputController/" + soName + ".asset", typeof(ScriptableObject));
+        InputControllerSOC existingSO = (InputControllerSOC)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Resources/" + soName + ".asset", typeof(ScriptableObject));
         if (!existingSO)
         {
             InputControllerSOC inputControllerSOC = ScriptableObject.CreateInstance<InputControllerSOC>();
-            AssetDatabase.CreateAsset(inputControllerSOC, "Assets/Sheen/InputController/" + soName + ".asset");
+            AssetDatabase.CreateAsset(inputControllerSOC, "Assets/Sheen/Resources/" + soName + ".asset");
             AssetDatabase.SaveAssets();
             existingSO = inputControllerSOC;
         }
 
         existingSO.referenceDpi = referenceDpi;
-        existingSO.tapTreshold = tapTreshold;
-        existingSO.swipeTreshold = swipeTreshold;
+        existingSO.tapThreshold = tapThreshold;
+        existingSO.swipeThreshold = swipeThreshold;
 
         EditorUtility.SetDirty(existingSO); //Saves changes made to this file
         LoadValuesFromScriptableObject(scriptableObjectName);
@@ -204,17 +185,15 @@ public class SheenInputController : EditorWindow
         Selection.activeObject = existingSO;
     }
 
-    void LoadValuesFromScriptableObject(string soName)
+    void CreatePrefab(string preName)
     {
-        InputControllerSOC existingSO = (InputControllerSOC)AssetDatabase.LoadAssetAtPath("Assets/Sheen/InputController/" + soName + ".asset", typeof(ScriptableObject));
-        if (existingSO)
+        SheenTouch objectToFind = FindObjectOfType<SheenTouch>();
+        if (!objectToFind)
         {
-            referenceDpi = existingSO.referenceDpi;
-            tapTreshold = existingSO.tapTreshold;
-            swipeTreshold = existingSO.swipeTreshold;
+            Object myPrefab = AssetDatabase.LoadAssetAtPath("Assets/Sheen/InputController/" + preName + ".prefab", typeof(GameObject));
+            PrefabUtility.InstantiatePrefab(myPrefab);
         }
     }
-
 
 }
 

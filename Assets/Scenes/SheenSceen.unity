@@ -567,7 +567,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1160672743
+--- !u!1001 &1275798207
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -618,9 +618,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 585282501427228977, guid: 19d7ac201903145f895dd3d71fc5b793, type: 3}
+      propertyPath: tapThreshold
+      value: 23
+      objectReference: {fileID: 0}
+    - target: {fileID: 585282501427228977, guid: 19d7ac201903145f895dd3d71fc5b793, type: 3}
+      propertyPath: swipeThreshold
+      value: 3232
+      objectReference: {fileID: 0}
     - target: {fileID: 585282501427228979, guid: 19d7ac201903145f895dd3d71fc5b793, type: 3}
       propertyPath: m_Name
       value: SheenTouch
+      objectReference: {fileID: 0}
+    - target: {fileID: 585282501427228979, guid: 19d7ac201903145f895dd3d71fc5b793, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19d7ac201903145f895dd3d71fc5b793, type: 3}

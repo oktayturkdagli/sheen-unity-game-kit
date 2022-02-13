@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: InputControllerSO
   m_EditorClassIdentifier: 
   referenceDpi: 400
-  tapTreshold: 0.6
-  swipeTreshold: 200
+  tapThreshold: 23
+  swipeThreshold: 3232
   useJoystick: 0
