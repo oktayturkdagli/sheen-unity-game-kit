@@ -6,8 +6,9 @@ public class SheenInputController : EditorWindow
 {
     int selectedToolbarIndex = 0;
     Texture[] standartTextures, toolbarTextures, touchpadTextures;
-    float referenceDPI = 200f, tapTreshold = 0.2f, swipeTreshold = 100f;
-    
+    bool isFirstOpen = true;
+    float referenceDpi = 200f, tapTreshold = 0.2f, swipeTreshold = 100f;
+
     bool joystickEnable = false;
     float JoystickOutRange = 2;
 
@@ -15,7 +16,7 @@ public class SheenInputController : EditorWindow
     bool optionalToggle1 = true;
     string optionalTextField1 = "Optional text";
 
-    GameObject touchGameObject;
+    string scriptableObjectName = "InputControllerSO";
 
     [MenuItem("Window/Sheen/Sheen Input Controller")]
     public static void Init()
@@ -25,6 +26,9 @@ public class SheenInputController : EditorWindow
 
     void OnGUI()
     {
+        if (isFirstOpen)
+            FirstOpen();
+
         TakeTextures();
         selectedToolbarIndex = GUILayout.Toolbar(selectedToolbarIndex, toolbarTextures);
         switch (selectedToolbarIndex)
@@ -50,10 +54,9 @@ public class SheenInputController : EditorWindow
         if (buttonBuild)
         {
             Debug.Log("Button Build clicked");
-            Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Sheen/InputController/SheenTouch.prefab", typeof(GameObject));
-            PrefabUtility.InstantiatePrefab(prefab);
-
-            
+            //Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Sheen/InputController/SheenTouch.prefab", typeof(GameObject));
+            //PrefabUtility.InstantiatePrefab(prefab);
+            CreateScriptableObject(scriptableObjectName);
         }
     }
 
@@ -62,7 +65,7 @@ public class SheenInputController : EditorWindow
         //Standart
         EditorGUILayout.Space();
         GUILayout.Label("Touch Controller", EditorStyles.boldLabel);
-        referenceDPI = EditorGUILayout.FloatField("Reference DPI", referenceDPI);
+        referenceDpi = EditorGUILayout.FloatField("Reference DPI", referenceDpi);
         tapTreshold = EditorGUILayout.FloatField("Tap Treshold", tapTreshold);
         swipeTreshold = EditorGUILayout.FloatField("Swipe Treshold", swipeTreshold);
         EditorGUILayout.Space(); EditorGUILayout.Space();
@@ -156,10 +159,15 @@ public class SheenInputController : EditorWindow
 
     }
 
+    void FirstOpen()
+    {
+        TakeTextures();
+        LoadValuesFromScriptableObject(scriptableObjectName);
+        isFirstOpen = false;
+    }
+
     void TakeTextures()
     {
-        //if (toolbarTextures == null)
-        //{
             standartTextures = new Texture[1];
             standartTextures[0] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_touch_black.png", typeof(Texture));
 
@@ -173,7 +181,42 @@ public class SheenInputController : EditorWindow
             touchpadTextures[1] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/arrow_right_black.png", typeof(Texture));
             touchpadTextures[2] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_center_1.png", typeof(Texture));
             touchpadTextures[3] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_knob_1.png", typeof(Texture));
-        //}
     }
 
+    void CreateScriptableObject(string soName)
+    {
+        InputControllerSOC existingSO = (InputControllerSOC)AssetDatabase.LoadAssetAtPath("Assets/Sheen/InputController/" + soName + ".asset", typeof(ScriptableObject));
+        if (!existingSO)
+        {
+            InputControllerSOC inputControllerSOC = ScriptableObject.CreateInstance<InputControllerSOC>();
+            AssetDatabase.CreateAsset(inputControllerSOC, "Assets/Sheen/InputController/" + soName + ".asset");
+            AssetDatabase.SaveAssets();
+            existingSO = inputControllerSOC;
+        }
+
+        existingSO.referenceDpi = referenceDpi;
+        existingSO.tapTreshold = tapTreshold;
+        existingSO.swipeTreshold = swipeTreshold;
+
+        EditorUtility.SetDirty(existingSO); //Saves changes made to this file
+        LoadValuesFromScriptableObject(scriptableObjectName);
+        EditorUtility.FocusProjectWindow();
+        Selection.activeObject = existingSO;
+    }
+
+    void LoadValuesFromScriptableObject(string soName)
+    {
+        InputControllerSOC existingSO = (InputControllerSOC)AssetDatabase.LoadAssetAtPath("Assets/Sheen/InputController/" + soName + ".asset", typeof(ScriptableObject));
+        if (existingSO)
+        {
+            referenceDpi = existingSO.referenceDpi;
+            tapTreshold = existingSO.tapTreshold;
+            swipeTreshold = existingSO.swipeTreshold;
+        }
+    }
+
+    
+
+
 }
+
