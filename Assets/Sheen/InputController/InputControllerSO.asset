@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abead1e4561bd4c0db69528daf03bee9, type: 3}
   m_Name: InputControllerSO
   m_EditorClassIdentifier: 
-  referenceDpi: 0
-  tapTreshold: 0
-  swipeTreshold: 0
+  referenceDpi: 400
+  tapTreshold: 0.6
+  swipeTreshold: 200
   useJoystick: 0

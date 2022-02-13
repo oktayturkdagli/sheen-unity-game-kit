@@ -215,8 +215,6 @@ public class SheenInputController : EditorWindow
         }
     }
 
-    
-
 
 }
 
