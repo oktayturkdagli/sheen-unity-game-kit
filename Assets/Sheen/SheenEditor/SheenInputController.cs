@@ -15,6 +15,8 @@ public class SheenInputController : EditorWindow
     bool optionalToggle1 = true;
     string optionalTextField1 = "Optional text";
 
+    GameObject touchGameObject;
+
     [MenuItem("Window/Sheen/Sheen Input Controller")]
     public static void Init()
     {
@@ -38,6 +40,21 @@ public class SheenInputController : EditorWindow
                 ControlGamePad();
                 break;
         }
+
+        //Build Button
+        EditorGUILayout.Space(); EditorGUILayout.Space();
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        bool buttonBuild = GUILayout.Button(" Build ");
+        GUILayout.EndHorizontal();
+        if (buttonBuild)
+        {
+            Debug.Log("Button Build clicked");
+            Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Sheen/InputController/SheenTouch.prefab", typeof(GameObject));
+            PrefabUtility.InstantiatePrefab(prefab);
+
+            
+        }
     }
 
     void ControlTouchPad()
@@ -55,25 +72,25 @@ public class SheenInputController : EditorWindow
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
         GUILayout.BeginVertical(GUILayout.Height(65));GUILayout.FlexibleSpace();
-        bool button1 = GUILayout.Button(touchpadTextures[0], GUILayout.Width(25), GUILayout.Height(25));
+        bool buttonCL = GUILayout.Button(touchpadTextures[0], GUILayout.Width(25), GUILayout.Height(25));
         GUILayout.EndVertical();
         GUILayout.BeginVertical();
         GUILayout.Box(" Center ");
         GUILayout.Box(touchpadTextures[2], GUILayout.Width(50), GUILayout.Height(50));
         GUILayout.EndVertical();
         GUILayout.BeginVertical(GUILayout.Height(65)); GUILayout.FlexibleSpace();
-        bool button2 = GUILayout.Button(touchpadTextures[1], GUILayout.Width(25), GUILayout.Height(25));
+        bool buttonCR = GUILayout.Button(touchpadTextures[1], GUILayout.Width(25), GUILayout.Height(25));
         GUILayout.EndVertical();
         GUILayout.FlexibleSpace();
         GUILayout.BeginVertical(GUILayout.Height(65)); GUILayout.FlexibleSpace();
-        bool button3 = GUILayout.Button(touchpadTextures[0], GUILayout.Width(25), GUILayout.Height(25));
+        bool buttonKL = GUILayout.Button(touchpadTextures[0], GUILayout.Width(25), GUILayout.Height(25));
         GUILayout.EndVertical();
         GUILayout.BeginVertical();
         GUILayout.Box("   Knob  ");
         GUILayout.Box(touchpadTextures[3], GUILayout.Width(50), GUILayout.Height(50));
         GUILayout.EndVertical();
         GUILayout.BeginVertical(GUILayout.Height(65)); GUILayout.FlexibleSpace();
-        bool button4 = GUILayout.Button(touchpadTextures[1], GUILayout.Width(25), GUILayout.Height(25));
+        bool buttonKR = GUILayout.Button(touchpadTextures[1], GUILayout.Width(25), GUILayout.Height(25));
         GUILayout.EndVertical();
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
@@ -91,21 +108,21 @@ public class SheenInputController : EditorWindow
         EditorGUILayout.EndToggleGroup();
         EditorGUILayout.Space(); EditorGUILayout.Space();
 
-        if (button1)
+        if (buttonCL)
         {
-            Debug.Log("Button1 clicked");
+            Debug.Log("ButtonCL clicked");
         }
-        else if (button2)
+        else if (buttonCR)
         {
-            Debug.Log("Button2 clicked");
+            Debug.Log("ButtonCR clicked");
         }
-        else if (button3)
+        else if (buttonKL)
         {
-            Debug.Log("Button3 clicked");
+            Debug.Log("ButtonKL clicked");
         }
-        else if (button4)
+        else if (buttonKR)
         {
-            Debug.Log("Button4 clicked");
+            Debug.Log("ButtonKR clicked");
         }
 
     }
@@ -146,10 +163,10 @@ public class SheenInputController : EditorWindow
             standartTextures = new Texture[1];
             standartTextures[0] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_touch_black.png", typeof(Texture));
 
-            toolbarTextures = new Texture[3];
+            toolbarTextures = new Texture[1];
             toolbarTextures[0] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_touch_black.png", typeof(Texture));
-            toolbarTextures[1] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_keyboard_black.png", typeof(Texture));
-            toolbarTextures[2] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_gamepad_black.png", typeof(Texture));
+            //toolbarTextures[1] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_keyboard_black.png", typeof(Texture));
+            //toolbarTextures[2] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_gamepad_black.png", typeof(Texture));
 
             touchpadTextures = new Texture[4];
             touchpadTextures[0] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/arrow_left_black.png", typeof(Texture));
