@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor;
 
 namespace Sheen.Touch
 {
@@ -83,7 +84,12 @@ namespace Sheen.Touch
         protected virtual void OnEnable()
         {
             instance = this;
-            LoadValuesFromScriptableObject(scriptableObjectName);
+            LoadValuesFromScriptableObject();
+        }
+
+        private void OnValidate()
+        {
+            SaveValuesToScriptableObject();
         }
 
         protected virtual void OnDisable()
@@ -218,18 +224,31 @@ namespace Sheen.Touch
             }
         }
 
-        void LoadValuesFromScriptableObject(string soName)
+        public void LoadValuesFromScriptableObject()
         {
-            InputControllerSOC existingSO = (InputControllerSOC)Resources.Load<InputControllerSOC>(soName);
+            InputControllerSOC existingSO = (InputControllerSOC)Resources.Load<InputControllerSOC>(scriptableObjectName);
             if (existingSO)
             {
+                useTouch = existingSO.useTouch;
                 referenceDpi = existingSO.referenceDpi;
                 tapThreshold = existingSO.tapThreshold;
                 swipeThreshold = existingSO.swipeThreshold;
             }
         }
+
+        public void SaveValuesToScriptableObject()
+        {
+            InputControllerSOC existingSO = (InputControllerSOC)Resources.Load<InputControllerSOC>(scriptableObjectName);
+            if (existingSO)
+            {
+                existingSO.useTouch = useTouch;
+                existingSO.referenceDpi = referenceDpi;
+                existingSO.tapThreshold = tapThreshold;
+                existingSO.swipeThreshold = swipeThreshold;
+            }
+        }
     }
-
-
 }
+
+
 
