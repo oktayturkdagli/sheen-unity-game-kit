@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abead1e4561bd4c0db69528daf03bee9, type: 3}
   m_Name: InputControllerSO
   m_EditorClassIdentifier: 
-  useTouch: 0
-  referenceDpi: 0
-  tapThreshold: 0
-  swipeThreshold: 0
-  useJoystick: 0
-  joystickCenterTexture: {fileID: 0}
-  joystickKnobTexture: {fileID: 0}
-  joystickOutRange: 0
+  useTouch: 1
+  referenceDpi: 200
+  tapThreshold: 0.2
+  swipeThreshold: 100
+  useJoystick: 1
+  joystickCenterTexture: {fileID: 2800000, guid: 86f5621f453994a8aa29cb329a1dac86, type: 3}
+  joystickKnobTexture: {fileID: 2800000, guid: f6f41e8b1e0df4a91813cda12fc0a7bb, type: 3}
+  joystickOutRange: 2

@@ -20,7 +20,7 @@ public class SheenInputController : EditorWindow
     string optionalTextField1 = "Optional text";
 
     string scriptableObjectName = "InputControllerSO";
-    string prefabName = "SheenTouch";
+    string prefabName = "Sheen Input Controller";
 
     [MenuItem("Window/Sheen/Sheen Input Controller")]
     public static void Init()
