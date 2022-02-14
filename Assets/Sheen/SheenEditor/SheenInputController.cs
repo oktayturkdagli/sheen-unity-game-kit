@@ -110,12 +110,15 @@ public class SheenInputController : EditorWindow
         EditorGUILayout.EndToggleGroup();
         EditorGUILayout.Space(); EditorGUILayout.Space();
 
-        //Optional Settings
-        optionalSettingsEnable = EditorGUILayout.BeginToggleGroup("Optional Settings", optionalSettingsEnable);
-        optionalToggle1 = EditorGUILayout.Toggle("Toggle 1", optionalToggle1);
-        optionalTextField1 = EditorGUILayout.TextField("Text", optionalTextField1);
-        EditorGUILayout.EndToggleGroup();
-        EditorGUILayout.Space(); EditorGUILayout.Space();
+        ////Optional Settings
+        //optionalSettingsEnable = EditorGUILayout.BeginFoldoutHeaderGroup(optionalSettingsEnable, "Optional Settings");
+        //if (optionalSettingsEnable)
+        //{
+        //    optionalToggle1 = EditorGUILayout.Toggle("Optional Toggle", optionalToggle1);
+        //    optionalTextField1 = EditorGUILayout.TextField("Optional Text", optionalTextField1);
+        //}
+        //EditorGUILayout.EndFoldoutHeaderGroup();
+        //EditorGUILayout.Space();
 
         if (buttonCL)
         {
