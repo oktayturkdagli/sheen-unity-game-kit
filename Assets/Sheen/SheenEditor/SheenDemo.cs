@@ -31,7 +31,6 @@ public class SheenDemoEditor : Editor
         EditorGUILayout.HelpBox("This is a help box", MessageType.Info);
 
     }
-
 }
 
 public class SheenDemoInspector : EditorWindow

@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
+
 
 public class SheenJoystick : MonoBehaviour
 {
     [SerializeField] bool useJoystick = true; //Can the joystick component be used?
+    [SerializeField] private Transform character; //The character to use the joystick
     [SerializeField] private RectTransform center; //Outer circle
     [SerializeField] private RectTransform knob; //Inner circle
     [SerializeField] private float outRange; //Determines how far the knob can be from the center
@@ -33,11 +36,6 @@ public class SheenJoystick : MonoBehaviour
     {
         LoadValuesFromScriptableObject();
     }
-
-    //void OnValidate()
-    //{
-    //    SaveValuesToScriptableObject();
-    //}
 
     void Logic()
     {
@@ -70,6 +68,11 @@ public class SheenJoystick : MonoBehaviour
             knob.position = center.position;
         }
 
+    }
+
+    void CharacterLogic()
+    {
+        
     }
 
     void ShowJoystick(bool state)
@@ -117,4 +120,21 @@ public class SheenJoystick : MonoBehaviour
         }
     }
 
+}
+
+[CustomEditor(typeof(SheenJoystick))]
+public class SheenJoystickEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        GUILayout.Space(5);
+        SheenJoystick sheenJoystickScript = (SheenJoystick)target;
+        if (GUILayout.Button("Save"))
+        {
+            sheenJoystickScript.SaveValuesToScriptableObject();
+        }
+        GUILayout.Space(10);
+        //EditorGUILayout.HelpBox("You must save your changes for them to take effect.", MessageType.Info);
+    }
 }

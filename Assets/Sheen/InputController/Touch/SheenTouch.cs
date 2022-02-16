@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEditor;
 
 public class SheenTouch : MonoBehaviour
 {
@@ -106,4 +107,22 @@ public class SheenTouch : MonoBehaviour
         }
     }
 
+}
+
+
+[CustomEditor(typeof(SheenTouch))]
+public class SheenTouchEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        GUILayout.Space(5);
+        SheenTouch sheenTouchScript = (SheenTouch)target;
+        if (GUILayout.Button("Save"))
+        {
+            sheenTouchScript.SaveValuesToScriptableObject();
+        }
+        GUILayout.Space(10);
+        //EditorGUILayout.HelpBox("You must save your changes for them to take effect.", MessageType.Info);
+    }
 }
