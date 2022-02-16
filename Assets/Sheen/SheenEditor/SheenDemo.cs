@@ -18,7 +18,7 @@ public class SheenDemo : MonoBehaviour
 }
 
 [CustomEditor(typeof(SheenDemo))]
-public class SheenDemoEditor : SheenEditor
+public class SheenDemoEditor : Editor
 {
     public override void OnInspectorGUI()
     {

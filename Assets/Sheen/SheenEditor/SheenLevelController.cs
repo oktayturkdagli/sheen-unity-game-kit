@@ -18,7 +18,7 @@ public class SheenLevelController : MonoBehaviour
 }
 
 [CustomEditor(typeof(SheenLevelController))]
-public class SheenLevelControllerEditor : SheenEditor
+public class SheenLevelControllerEditor : Editor
 {
     public override void OnInspectorGUI()
     {

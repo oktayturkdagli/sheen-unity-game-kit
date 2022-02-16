@@ -1,19 +1,20 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using Sheen.Touch;
 using System.IO;
+
 
 public class SheenInputController : EditorWindow
 {
     int selectedToolbarIndex = 0;
     Texture[] standartTextures, toolbarTextures, touchpadTextures;
+    Sprite[] touchpadSprites;
     bool useTouch = true;
-    float referenceDpi = 200f, tapThreshold = 0.2f, swipeThreshold = 100f;
+    float tapThreshold = 0.2f;
 
     bool useJoystick = true;
     int joystickCenterCounter = 1, joystickKnobCounter = 5;
     Texture joystickCenterTexture, joystickKnobTexture;
-    float joystickOutRange = 2f;
+    float joystickOutRange = 1f;
 
     bool optionalSettingsEnable = false;
     bool optionalToggle1 = true;
@@ -70,9 +71,7 @@ public class SheenInputController : EditorWindow
         //Standart
         EditorGUILayout.Space();
         useTouch = EditorGUILayout.BeginToggleGroup("Touch", useTouch);
-        referenceDpi = EditorGUILayout.FloatField("Reference DPI", referenceDpi);
-        tapThreshold = EditorGUILayout.FloatField("Tap Treshold", tapThreshold);
-        swipeThreshold = EditorGUILayout.FloatField("Swipe Treshold", swipeThreshold);
+        tapThreshold = EditorGUILayout.Slider("Tap Treshold", tapThreshold, 0.01f, 1f);
         EditorGUILayout.EndToggleGroup();
         EditorGUILayout.Space(); EditorGUILayout.Space();
 
@@ -105,7 +104,7 @@ public class SheenInputController : EditorWindow
         GUILayout.EndHorizontal();
         EditorGUILayout.Space();
         GUILayout.BeginHorizontal();
-        joystickOutRange = EditorGUILayout.Slider("Outrange", joystickOutRange, 0, 10);
+        joystickOutRange = EditorGUILayout.Slider("Outrange", joystickOutRange, 0.01f, 1f);
         GUILayout.EndHorizontal();
         EditorGUILayout.EndToggleGroup();
         EditorGUILayout.Space(); EditorGUILayout.Space();
@@ -171,7 +170,16 @@ public class SheenInputController : EditorWindow
         touchpadTextures[4] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_5.png", typeof(Texture));
         touchpadTextures[5] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_6.png", typeof(Texture));
         touchpadTextures[6] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_7.png", typeof(Texture));
-        
+
+        touchpadSprites = new Sprite[7];
+        touchpadSprites[0] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_1.png", typeof(Sprite));
+        touchpadSprites[1] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_2.png", typeof(Sprite));
+        touchpadSprites[2] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_3.png", typeof(Sprite));
+        touchpadSprites[3] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_4.png", typeof(Sprite));
+        touchpadSprites[4] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_5.png", typeof(Sprite));
+        touchpadSprites[5] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_6.png", typeof(Sprite));
+        touchpadSprites[6] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_7.png", typeof(Sprite));
+
         joystickCenterTexture = touchpadTextures[joystickCenterCounter];
         joystickKnobTexture = touchpadTextures[joystickKnobCounter];
     }
@@ -182,13 +190,11 @@ public class SheenInputController : EditorWindow
         if (existingSO)
         {
             useTouch = existingSO.useTouch;
-            referenceDpi = existingSO.referenceDpi;
             tapThreshold = existingSO.tapThreshold;
-            swipeThreshold = existingSO.swipeThreshold;
 
             useJoystick = existingSO.useJoystick;
-            joystickCenterTexture = existingSO.joystickCenterTexture;
-            joystickKnobTexture = existingSO.joystickKnobTexture;
+            //joystickCenterTexture = existingSO.joystickCenterTexture;
+            //joystickKnobTexture = existingSO.joystickKnobTexture;
             joystickOutRange = existingSO.joystickOutRange;
         }
     }
@@ -199,13 +205,10 @@ public class SheenInputController : EditorWindow
         if (existingSO)
         {
             existingSO.useTouch = useTouch;
-            existingSO.referenceDpi = referenceDpi;
             existingSO.tapThreshold = tapThreshold;
-            existingSO.swipeThreshold = swipeThreshold;
-
             existingSO.useJoystick = useJoystick;
-            existingSO.joystickCenterTexture = joystickCenterTexture;
-            existingSO.joystickKnobTexture = joystickKnobTexture;
+            existingSO.joystickCenterSprite = touchpadSprites[joystickCenterCounter];
+            existingSO.joystickKnobSprite = touchpadSprites[joystickKnobCounter];
             existingSO.joystickOutRange = joystickOutRange;
         }
     }
@@ -232,19 +235,21 @@ public class SheenInputController : EditorWindow
 
     void CreatePrefab()
     {
-        SheenTouch objectToFind = FindObjectOfType<SheenTouch>();
-        if (!objectToFind)
+        SheenTouch sheenTouch = FindObjectOfType<SheenTouch>();
+        SheenJoystick sheenJoystick = FindObjectOfType<SheenJoystick>();
+        if (!sheenTouch)
         {
-            Object myPrefab = AssetDatabase.LoadAssetAtPath("Assets/Sheen/InputController/" + prefabName + ".prefab", typeof(GameObject));
+            Object myPrefab = AssetDatabase.LoadAssetAtPath("Assets/Sheen/InputController/Prefabs/" + prefabName + ".prefab", typeof(GameObject));
             PrefabUtility.InstantiatePrefab(myPrefab);
-        }
-        else
-        {
-            objectToFind.LoadValuesFromScriptableObject();
+            sheenTouch = FindObjectOfType<SheenTouch>();
+            sheenJoystick = FindObjectOfType<SheenJoystick>();
         }
 
+        sheenTouch.LoadValuesFromScriptableObject();
+        sheenJoystick.LoadValuesFromScriptableObject();
+
         EditorUtility.FocusProjectWindow();
-        Selection.activeObject = objectToFind;
+        Selection.activeObject = sheenTouch;
     }
 
 }
