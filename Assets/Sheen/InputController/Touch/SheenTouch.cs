@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class SheenTouch : MonoBehaviour
 {
@@ -10,6 +11,14 @@ public class SheenTouch : MonoBehaviour
     float[] timeTouchBegan;
     bool[] touchDidMove;
     float lastClickTime;
+
+    //EVENTS
+    public static event Action<int> OnFingerDown; //Gets fired when a finger begins touching the screen 
+    public static event Action<int> OnFingerMoved; //Gets fired every frame a finger is touching the screen 											  
+    public static event Action<int> OnFingerUp; //Gets fired when a finger stops touching the screen 
+    public static event Action<int> OnFingerTap; //Gets fired when a finger taps the screen
+    public static event Action<int> OnFingerDoubleTap; //Gets fired when a finger taps the screen 
+    public static event Action<int> OnFingerSwipe; //Gets fired when a finger swipes the screen 
 
     void Start()
     {
@@ -41,30 +50,35 @@ public class SheenTouch : MonoBehaviour
 
             if (touch.phase == TouchPhase.Began)
             {
-                Debug.Log("Finger #" + fingerIndex.ToString() + " entered!");
+                //Debug.Log("Finger #" + fingerIndex.ToString() + " entered!");
                 timeTouchBegan[fingerIndex] = Time.time;
                 touchDidMove[fingerIndex] = false;
+                OnFingerDown?.Invoke(fingerIndex);
             }
             if (touch.phase == TouchPhase.Moved)
             {
-                Debug.Log("Finger #" + fingerIndex.ToString() + " moved!");
+                //Debug.Log("Finger #" + fingerIndex.ToString() + " moved!");
                 touchDidMove[fingerIndex] = true;
+                OnFingerMoved?.Invoke(fingerIndex);
             }
             if (touch.phase == TouchPhase.Ended)
             {
                 float tapTime = Time.time - timeTouchBegan[fingerIndex];
-                Debug.Log("Finger #" + fingerIndex.ToString() + " left. Tap time: " + tapTime.ToString());
+                //Debug.Log("Finger #" + fingerIndex.ToString() + " left. Tap time: " + tapTime.ToString());
+                OnFingerUp?.Invoke(fingerIndex);
 
                 if (tapTime <= tapThreshold && touchDidMove[fingerIndex] == false)
                 {
                     float timeSinceLastClick = Time.time - lastClickTime;
                     if (timeSinceLastClick <= tapThreshold)
                     {
-                        Debug.Log("Finger #" + fingerIndex.ToString() + "DOUBLE TAP DETECTED at: " + touch.position.ToString());
+                        //Debug.Log("Finger #" + fingerIndex.ToString() + "DOUBLE TAP DETECTED at: " + touch.position.ToString());
+                        OnFingerDoubleTap?.Invoke(fingerIndex);
                     }
                     else
                     {
-                        Debug.Log("Finger #" + fingerIndex.ToString() + " TAP DETECTED at: " + touch.position.ToString());
+                        //Debug.Log("Finger #" + fingerIndex.ToString() + " TAP DETECTED at: " + touch.position.ToString());
+                        OnFingerTap?.Invoke(fingerIndex);
                     }
                     lastClickTime = Time.time;
                 }

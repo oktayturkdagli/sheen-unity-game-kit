@@ -98,6 +98,8 @@ public class SheenJoystick : MonoBehaviour
             outRange = existingSO.joystickOutRange;
             center.GetComponent<Image>().sprite = existingSO.joystickCenterSprite;
             knob.GetComponent<Image>().sprite = existingSO.joystickKnobSprite;
+            fixedJoystick = existingSO.fixedJoystick;
+            alwaysDisplay = existingSO.alwaysDisplayJoystick;
         }
     }
 
@@ -110,6 +112,8 @@ public class SheenJoystick : MonoBehaviour
             existingSO.joystickOutRange = outRange;
             existingSO.joystickCenterSprite = center.GetComponent<Image>().sprite;
             existingSO.joystickKnobSprite = knob.GetComponent<Image>().sprite;
+            existingSO.fixedJoystick = fixedJoystick;
+            existingSO.alwaysDisplayJoystick = alwaysDisplay;
         }
     }
 

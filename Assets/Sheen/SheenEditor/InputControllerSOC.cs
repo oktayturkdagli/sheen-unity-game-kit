@@ -11,4 +11,7 @@ public class InputControllerSOC : ScriptableObject
     [SerializeField] public Sprite joystickCenterSprite;
     [SerializeField] public Sprite joystickKnobSprite;
     [SerializeField] [Range(0.01f, 1f)] public float joystickOutRange;
+    [SerializeField] public bool fixedJoystick;
+    [SerializeField] public bool alwaysDisplayJoystick;
+
 }

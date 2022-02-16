@@ -11,7 +11,7 @@ public class SheenInputController : EditorWindow
     bool useTouch = true;
     float tapThreshold = 0.2f;
 
-    bool useJoystick = true;
+    bool useJoystick = true, fixedJoystick = true, alwaysDisplayJoystick = true;
     int joystickCenterCounter = 1, joystickKnobCounter = 5;
     Texture joystickCenterTexture, joystickKnobTexture;
     float joystickOutRange = 1f;
@@ -106,6 +106,8 @@ public class SheenInputController : EditorWindow
         GUILayout.BeginHorizontal();
         joystickOutRange = EditorGUILayout.Slider("Outrange", joystickOutRange, 0.01f, 1f);
         GUILayout.EndHorizontal();
+        fixedJoystick = EditorGUILayout.Toggle("Fixed Joystick", fixedJoystick);
+        alwaysDisplayJoystick = EditorGUILayout.Toggle("Always Display", alwaysDisplayJoystick);
         EditorGUILayout.EndToggleGroup();
         EditorGUILayout.Space(); EditorGUILayout.Space();
 
@@ -196,6 +198,8 @@ public class SheenInputController : EditorWindow
             //joystickCenterTexture = existingSO.joystickCenterTexture;
             //joystickKnobTexture = existingSO.joystickKnobTexture;
             joystickOutRange = existingSO.joystickOutRange;
+            fixedJoystick = existingSO.fixedJoystick;
+            alwaysDisplayJoystick = existingSO.alwaysDisplayJoystick;
         }
     }
 
@@ -210,6 +214,8 @@ public class SheenInputController : EditorWindow
             existingSO.joystickCenterSprite = touchpadSprites[joystickCenterCounter];
             existingSO.joystickKnobSprite = touchpadSprites[joystickKnobCounter];
             existingSO.joystickOutRange = joystickOutRange;
+            existingSO.fixedJoystick = fixedJoystick;
+            existingSO.alwaysDisplayJoystick = alwaysDisplayJoystick;
         }
     }
 
