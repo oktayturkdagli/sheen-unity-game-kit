@@ -62,7 +62,7 @@ public class SheenInputController : EditorWindow
         {
             CreateScriptableObject();
             CreatePrefab();
-            //this.Close();
+            this.Close();
         }
     }
 

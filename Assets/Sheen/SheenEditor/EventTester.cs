@@ -31,4 +31,14 @@ public class EventTester : MonoBehaviour
 	{
 		Debug.Log("Finger " + fingerIndex + " swiped the screen");
 	}
+
+	public void HandleFingerScreen(Vector2 position)
+	{
+		Debug.Log("Finger touch the screen x:" + position.x + " y:" + position.y);
+	}
+
+	public void HandleJoystick(Vector2 direction)
+	{
+		Debug.Log("Joystick moved x:" + direction.x + " y:" + direction.y);
+	}
 }

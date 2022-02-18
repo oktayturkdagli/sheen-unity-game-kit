@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 public class SheenTouch : MonoBehaviour
 {
-    [SerializeField] bool useTouch = true;
+    [SerializeField] bool useTouch;
     [SerializeField] [Range(0.01f, 1f)] float tapThreshold = 0.2f;
     string scriptableObjectName = "InputControllerSO";
 
@@ -19,6 +19,7 @@ public class SheenTouch : MonoBehaviour
     [SerializeField] public UnityEvent<int> OnFingerTap;
     [SerializeField] public UnityEvent<int> OnFingerDoubleTap;
     [SerializeField] public UnityEvent<int> OnFingerSwipe;
+    [SerializeField] public UnityEvent<Vector2> OnFingerScreen;
 
     void Start()
     {
@@ -27,17 +28,26 @@ public class SheenTouch : MonoBehaviour
         touchDidMove = new bool[10];
     }
 
-    private void Update()
+    void Update()
     {
-        Logic();
+        if (useTouch)
+        {
+            Logic();
+        }  
     }
 
-    protected void OnEnable()
+    void OnEnable()
     {
         LoadValuesFromScriptableObject();
     }
 
-    public void Logic()
+    void Logic()
+    {
+        Touch();
+        Mouse();
+    }
+
+    void Touch()
     {
         foreach (Touch touch in Input.touches)
         {
@@ -45,34 +55,32 @@ public class SheenTouch : MonoBehaviour
 
             if (touch.phase == TouchPhase.Began)
             {
-                //Debug.Log("Finger #" + fingerIndex.ToString() + " entered!");
                 timeTouchBegan[fingerIndex] = Time.time;
                 touchDidMove[fingerIndex] = false;
                 OnFingerDown.Invoke(fingerIndex);
+                OnFingerScreen.Invoke(Camera.main.ScreenToWorldPoint(touch.position));
             }
             if (touch.phase == TouchPhase.Moved)
             {
-                //Debug.Log("Finger #" + fingerIndex.ToString() + " moved!");
                 touchDidMove[fingerIndex] = true;
                 OnFingerMoved.Invoke(fingerIndex);
+                OnFingerScreen.Invoke(Camera.main.ScreenToWorldPoint(touch.position));
             }
             if (touch.phase == TouchPhase.Ended)
             {
                 float tapTime = Time.time - timeTouchBegan[fingerIndex];
-                //Debug.Log("Finger #" + fingerIndex.ToString() + " left. Tap time: " + tapTime.ToString());
                 OnFingerUp.Invoke(fingerIndex);
+                OnFingerScreen.Invoke(Camera.main.ScreenToWorldPoint(touch.position));
 
                 if (tapTime <= tapThreshold && touchDidMove[fingerIndex] == false)
                 {
                     float timeSinceLastClick = Time.time - lastClickTime;
                     if (timeSinceLastClick <= tapThreshold)
                     {
-                        //Debug.Log("Finger #" + fingerIndex.ToString() + "DOUBLE TAP DETECTED at: " + touch.position.ToString());
                         OnFingerDoubleTap.Invoke(fingerIndex);
                     }
                     else
                     {
-                        //Debug.Log("Finger #" + fingerIndex.ToString() + " TAP DETECTED at: " + touch.position.ToString());
                         OnFingerTap.Invoke(fingerIndex);
                     }
                     lastClickTime = Time.time;
@@ -80,7 +88,52 @@ public class SheenTouch : MonoBehaviour
             }
         }
     }
-    
+
+    void Mouse()
+    {
+        if (Input.touchCount == 0)
+        {
+            int fingerIndex = 0;
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                timeTouchBegan[fingerIndex] = Time.time;
+                touchDidMove[fingerIndex] = false;
+                OnFingerDown.Invoke(fingerIndex);
+                OnFingerScreen.Invoke(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            }
+            if (Input.GetMouseButton(0))
+            {
+                if (Input.GetAxis("Mouse X") < 0 || Input.GetAxis("Mouse X") > 0)
+                {
+                    touchDidMove[fingerIndex] = true;
+                    OnFingerMoved.Invoke(fingerIndex);  
+                }
+                OnFingerScreen.Invoke(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                float tapTime = Time.time - timeTouchBegan[fingerIndex];
+                OnFingerUp.Invoke(fingerIndex);
+                OnFingerScreen.Invoke(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+
+                if (tapTime <= tapThreshold && touchDidMove[fingerIndex] == false)
+                {
+                    float timeSinceLastClick = Time.time - lastClickTime;
+                    if (timeSinceLastClick <= tapThreshold)
+                    {
+                        OnFingerDoubleTap.Invoke(fingerIndex);
+                    }
+                    else
+                    {
+                        OnFingerTap.Invoke(fingerIndex);
+                    }
+                    lastClickTime = Time.time;
+                }
+            }
+        }
+    }
+
     public void LoadValuesFromScriptableObject()
     {
         InputControllerSOC existingSO = (InputControllerSOC)Resources.Load<InputControllerSOC>(scriptableObjectName);

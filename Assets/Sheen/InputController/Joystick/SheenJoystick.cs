@@ -5,13 +5,13 @@ using UnityEngine.Events;
 
 public class SheenJoystick : MonoBehaviour
 {
-    [SerializeField] bool useJoystick = true; //Can the joystick component be used?
-    [SerializeField] private RectTransform center; //Outer circle
-    [SerializeField] private RectTransform knob; //Inner circle
-    [SerializeField] private float outRange; //Determines how far the knob can be from the center
-    [SerializeField] private bool fixedJoystick; //Joystick pins to a default point
-    [SerializeField] private bool alwaysDisplay; //If, false makes the joystick disappear from the screen when not in use
-    private Vector2 direction;
+    [SerializeField] bool useJoystick; //Can the joystick component be used?
+    [SerializeField] RectTransform center; //Outer circle
+    [SerializeField] RectTransform knob; //Inner circle
+    [SerializeField] float outRange; //Determines how far the knob can be from the center
+    [SerializeField] bool fixedJoystick; //Joystick pins to a default point
+    [SerializeField] bool alwaysDisplay; //If, false makes the joystick disappear from the screen when not in use
+    Vector2 direction;
     Vector2 fixedJoystickPosition;
     string scriptableObjectName = "InputControllerSO";
 
@@ -20,16 +20,26 @@ public class SheenJoystick : MonoBehaviour
     void Start()
     {
         LoadValuesFromScriptableObject();
-        DisplayJoystick(alwaysDisplay);
         fixedJoystickPosition = center.position;
+        if (useJoystick)
+        {
+            DisplayJoystick(alwaysDisplay);
+        }
+        else
+        {
+            DisplayJoystick(false);
+        }
     }
        
     void Update()
     {
-        Logic();
+        if (useJoystick)
+        {
+            Logic();
+        } 
     }
 
-    protected void OnEnable()
+    void OnEnable()
     {
         LoadValuesFromScriptableObject();
     }
