@@ -3,27 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
-
+using System;
 
 public class SheenJoystick : MonoBehaviour
 {
     [SerializeField] bool useJoystick = true; //Can the joystick component be used?
-    [SerializeField] private Transform character; //The character to use the joystick
     [SerializeField] private RectTransform center; //Outer circle
     [SerializeField] private RectTransform knob; //Inner circle
     [SerializeField] private float outRange; //Determines how far the knob can be from the center
     [SerializeField] private bool fixedJoystick; //Joystick pins to a default point
     [SerializeField] private bool alwaysDisplay; //If, false makes the joystick disappear from the screen when not in use
-
-    
     private Vector2 direction;
     Vector2 fixedJoystickPosition;
     string scriptableObjectName = "InputControllerSO";
 
+    public static event Action<Vector2> OnJoystick; //Gets fired when using the joystick
+
     void Start()
     {
         LoadValuesFromScriptableObject();
-        ShowJoystick(alwaysDisplay);
+        DisplayJoystick(alwaysDisplay);
         fixedJoystickPosition = center.position;
     }
        
@@ -42,7 +41,7 @@ public class SheenJoystick : MonoBehaviour
         Vector2 touchPosition = Input.mousePosition;
         if (Input.GetMouseButtonDown(0))
         {
-            ShowJoystick(true);
+            DisplayJoystick(true);
             if (fixedJoystick)
             {
                 knob.position = fixedJoystickPosition;
@@ -59,23 +58,20 @@ public class SheenJoystick : MonoBehaviour
             knob.position = touchPosition;
             knob.position = center.position + Vector3.ClampMagnitude(knob.position - center.position, center.sizeDelta.x * outRange);
             direction = (knob.position - center.position).normalized;
+            OnJoystick?.Invoke(direction);
         }
         else
         {
             if (!alwaysDisplay)
-                ShowJoystick(false);
-            direction = Vector2.zero;
+                DisplayJoystick(false);
             knob.position = center.position;
+            direction = Vector2.zero;
+            OnJoystick?.Invoke(direction);
         }
 
     }
 
-    void CharacterLogic()
-    {
-        
-    }
-
-    void ShowJoystick(bool state)
+    void DisplayJoystick(bool state)
     {
         center.gameObject.SetActive(state);
         knob.gameObject.SetActive(state);

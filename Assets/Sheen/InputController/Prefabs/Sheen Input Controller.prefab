@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useTouch: 1
-  tapThreshold: 0.3
+  tapThreshold: 0.232
 --- !u!114 &4953702522242314053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,6 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useJoystick: 1
+  character: {fileID: 4953702522242314054}
   center: {fileID: 4953702521785476314}
   knob: {fileID: 4953702523160578404}
   outRange: 1
@@ -260,7 +261,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4953702522809129903
 RectTransform:
   m_ObjectHideFlags: 0
@@ -487,7 +488,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 66d8f15f26ac247048ca08730c802cb5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 733e0708654e34fc18466f04d38ec3c0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -514,7 +515,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4953702523166437131
 RectTransform:
   m_ObjectHideFlags: 0
