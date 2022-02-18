@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEditor;
-using System;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class SheenJoystick : MonoBehaviour
 {
@@ -17,7 +15,7 @@ public class SheenJoystick : MonoBehaviour
     Vector2 fixedJoystickPosition;
     string scriptableObjectName = "InputControllerSO";
 
-    public static event Action<Vector2> OnJoystick; //Gets fired when using the joystick
+    [SerializeField] public UnityEvent<Vector2> OnJoystick;
 
     void Start()
     {
@@ -58,7 +56,7 @@ public class SheenJoystick : MonoBehaviour
             knob.position = touchPosition;
             knob.position = center.position + Vector3.ClampMagnitude(knob.position - center.position, center.sizeDelta.x * outRange);
             direction = (knob.position - center.position).normalized;
-            OnJoystick?.Invoke(direction);
+            OnJoystick.Invoke(direction);
         }
         else
         {
@@ -66,7 +64,7 @@ public class SheenJoystick : MonoBehaviour
                 DisplayJoystick(false);
             knob.position = center.position;
             direction = Vector2.zero;
-            OnJoystick?.Invoke(direction);
+            OnJoystick.Invoke(direction);
         }
 
     }

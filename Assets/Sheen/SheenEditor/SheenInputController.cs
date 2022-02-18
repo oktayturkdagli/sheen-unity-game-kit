@@ -1,5 +1,5 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEditor;
 using System.IO;
 
 
@@ -16,9 +16,9 @@ public class SheenInputController : EditorWindow
     Texture joystickCenterTexture, joystickKnobTexture;
     float joystickOutRange = 1f;
 
-    bool optionalSettingsEnable = false;
-    bool optionalToggle1 = true;
-    string optionalTextField1 = "Optional text";
+    //bool optionalSettingsEnable = false;
+    //bool optionalToggle1 = true;
+    //string optionalTextField1 = "Optional text";
 
     string scriptableObjectName = "InputControllerSO";
     string prefabName = "Sheen Input Controller";
@@ -42,7 +42,7 @@ public class SheenInputController : EditorWindow
         {
             default:
             case 0:
-                ControlTouchPad();
+                LogicTouchpad();
                 break;
             case 1:
                 Debug.Log("This is reserved for future developments.");
@@ -66,7 +66,7 @@ public class SheenInputController : EditorWindow
         }
     }
 
-    void ControlTouchPad()
+    void LogicTouchpad()
     {
         //Standart
         EditorGUILayout.Space();

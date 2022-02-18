@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 using UnityEditor;
+using UnityEngine.Events;
 
 public class SheenTouch : MonoBehaviour
 {
@@ -14,12 +13,12 @@ public class SheenTouch : MonoBehaviour
     float lastClickTime;
 
     //EVENTS
-    public static event Action<int> OnFingerDown; //Gets fired when a finger begins touching the screen 
-    public static event Action<int> OnFingerMoved; //Gets fired every frame a finger is touching the screen 											  
-    public static event Action<int> OnFingerUp; //Gets fired when a finger stops touching the screen 
-    public static event Action<int> OnFingerTap; //Gets fired when a finger taps the screen
-    public static event Action<int> OnFingerDoubleTap; //Gets fired when a finger taps the screen 
-    public static event Action<int> OnFingerSwipe; //Gets fired when a finger swipes the screen 
+    [SerializeField] public UnityEvent<int> OnFingerDown;
+    [SerializeField] public UnityEvent<int> OnFingerMoved;
+    [SerializeField] public UnityEvent<int> OnFingerUp;
+    [SerializeField] public UnityEvent<int> OnFingerTap;
+    [SerializeField] public UnityEvent<int> OnFingerDoubleTap;
+    [SerializeField] public UnityEvent<int> OnFingerSwipe;
 
     void Start()
     {
@@ -30,7 +29,7 @@ public class SheenTouch : MonoBehaviour
 
     private void Update()
     {
-        Touches();
+        Logic();
     }
 
     protected void OnEnable()
@@ -38,12 +37,7 @@ public class SheenTouch : MonoBehaviour
         LoadValuesFromScriptableObject();
     }
 
-    //private void OnValidate()
-    //{
-    //    SaveValuesToScriptableObject();
-    //}
-
-    public void Touches()
+    public void Logic()
     {
         foreach (Touch touch in Input.touches)
         {
@@ -54,19 +48,19 @@ public class SheenTouch : MonoBehaviour
                 //Debug.Log("Finger #" + fingerIndex.ToString() + " entered!");
                 timeTouchBegan[fingerIndex] = Time.time;
                 touchDidMove[fingerIndex] = false;
-                OnFingerDown?.Invoke(fingerIndex);
+                OnFingerDown.Invoke(fingerIndex);
             }
             if (touch.phase == TouchPhase.Moved)
             {
                 //Debug.Log("Finger #" + fingerIndex.ToString() + " moved!");
                 touchDidMove[fingerIndex] = true;
-                OnFingerMoved?.Invoke(fingerIndex);
+                OnFingerMoved.Invoke(fingerIndex);
             }
             if (touch.phase == TouchPhase.Ended)
             {
                 float tapTime = Time.time - timeTouchBegan[fingerIndex];
                 //Debug.Log("Finger #" + fingerIndex.ToString() + " left. Tap time: " + tapTime.ToString());
-                OnFingerUp?.Invoke(fingerIndex);
+                OnFingerUp.Invoke(fingerIndex);
 
                 if (tapTime <= tapThreshold && touchDidMove[fingerIndex] == false)
                 {
@@ -74,12 +68,12 @@ public class SheenTouch : MonoBehaviour
                     if (timeSinceLastClick <= tapThreshold)
                     {
                         //Debug.Log("Finger #" + fingerIndex.ToString() + "DOUBLE TAP DETECTED at: " + touch.position.ToString());
-                        OnFingerDoubleTap?.Invoke(fingerIndex);
+                        OnFingerDoubleTap.Invoke(fingerIndex);
                     }
                     else
                     {
                         //Debug.Log("Finger #" + fingerIndex.ToString() + " TAP DETECTED at: " + touch.position.ToString());
-                        OnFingerTap?.Invoke(fingerIndex);
+                        OnFingerTap.Invoke(fingerIndex);
                     }
                     lastClickTime = Time.time;
                 }
