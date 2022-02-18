@@ -121,6 +121,7 @@ public class SheenJoystick : MonoBehaviour
             existingSO.joystickKnobSprite = knob.GetComponent<Image>().sprite;
             existingSO.fixedJoystick = fixedJoystick;
             existingSO.alwaysDisplayJoystick = alwaysDisplay;
+            EditorUtility.SetDirty(existingSO); //Saves changes made to this file
         }
     }
 

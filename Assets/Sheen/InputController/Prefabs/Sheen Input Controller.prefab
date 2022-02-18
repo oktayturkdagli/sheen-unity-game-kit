@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 4953702522242314054}
   - component: {fileID: 1328345427989661404}
   - component: {fileID: 4953702522242314053}
+  - component: {fileID: 508589809}
   m_Layer: 0
   m_Name: Sheen Input Controller
   m_TagString: Untagged
@@ -123,7 +124,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useTouch: 1
-  tapThreshold: 0.232
+  tapThreshold: 0.2
+  OnFingerDown:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFingerMoved:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFingerUp:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFingerTap:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFingerDoubleTap:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFingerSwipe:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFingerScreen:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFingerScreen3D:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4953702522242314053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,13 +161,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45620e7b3ff6440059a151b24c40b5ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useJoystick: 1
-  character: {fileID: 4953702522242314054}
+  useJoystick: 0
   center: {fileID: 4953702521785476314}
   knob: {fileID: 4953702523160578404}
   outRange: 1
   fixedJoystick: 1
   alwaysDisplay: 1
+  OnJoystick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 508589809}
+        m_TargetAssemblyTypeName: EventTester, Assembly-CSharp
+        m_MethodName: HandleJoystick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &508589809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4953702522242314055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdb27e0008f33426f97f22b394d30058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4953702522254339616
 GameObject:
   m_ObjectHideFlags: 0

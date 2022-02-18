@@ -19,7 +19,9 @@ public class SheenTouch : MonoBehaviour
     [SerializeField] public UnityEvent<int> OnFingerTap;
     [SerializeField] public UnityEvent<int> OnFingerDoubleTap;
     [SerializeField] public UnityEvent<int> OnFingerSwipe;
-    [SerializeField] public UnityEvent<Vector2> OnFingerScreen;
+    [SerializeField] public UnityEvent<Vector2> OnFingerScreen; //TODO: More position options will be added and positions will be explained more accurately
+    [SerializeField] public UnityEvent<Vector3> OnFingerScreen3D; //TODO: More position options will be added and positions will be explained more accurately
+
 
     void Start()
     {
@@ -100,7 +102,13 @@ public class SheenTouch : MonoBehaviour
                 timeTouchBegan[fingerIndex] = Time.time;
                 touchDidMove[fingerIndex] = false;
                 OnFingerDown.Invoke(fingerIndex);
-                OnFingerScreen.Invoke(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                OnFingerScreen.Invoke(Input.mousePosition);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit raycastHit))
+                {
+                    OnFingerScreen3D.Invoke(raycastHit.point);
+                }
+                
             }
             if (Input.GetMouseButton(0))
             {
@@ -109,13 +117,13 @@ public class SheenTouch : MonoBehaviour
                     touchDidMove[fingerIndex] = true;
                     OnFingerMoved.Invoke(fingerIndex);  
                 }
-                OnFingerScreen.Invoke(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                //OnFingerScreen.Invoke(Input.mousePosition);
             }
             if (Input.GetMouseButtonUp(0))
             {
                 float tapTime = Time.time - timeTouchBegan[fingerIndex];
                 OnFingerUp.Invoke(fingerIndex);
-                OnFingerScreen.Invoke(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                //OnFingerScreen.Invoke(Input.mousePosition);
 
                 if (tapTime <= tapThreshold && touchDidMove[fingerIndex] == false)
                 {
@@ -151,6 +159,7 @@ public class SheenTouch : MonoBehaviour
         {
             existingSO.useTouch = useTouch;
             existingSO.tapThreshold = tapThreshold;
+            EditorUtility.SetDirty(existingSO); //Saves changes made to this file
         }
     }
 
@@ -168,6 +177,7 @@ public class SheenTouchEditor : Editor
         if (GUILayout.Button("Save"))
         {
             sheenTouchScript.SaveValuesToScriptableObject();
+
         }
         GUILayout.Space(10);
         //EditorGUILayout.HelpBox("You must save your changes for them to take effect.", MessageType.Info);

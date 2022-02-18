@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abead1e4561bd4c0db69528daf03bee9, type: 3}
   m_Name: InputControllerSO
   m_EditorClassIdentifier: 
-  useTouch: 0
-  tapThreshold: 0.2
+  useTouch: 1
+  tapThreshold: 0.437
   useJoystick: 0
   joystickCenterSprite: {fileID: 21300000, guid: 86f5621f453994a8aa29cb329a1dac86, type: 3}
   joystickKnobSprite: {fileID: 21300000, guid: 733e0708654e34fc18466f04d38ec3c0, type: 3}
