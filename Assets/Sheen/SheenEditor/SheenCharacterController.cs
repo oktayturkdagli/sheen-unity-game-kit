@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 public class SheenCharacterController : EditorWindow
@@ -14,4 +15,4 @@ public class SheenCharacterController : EditorWindow
 
     }
 }
-
+#endif

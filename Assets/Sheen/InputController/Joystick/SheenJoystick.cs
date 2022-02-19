@@ -1,25 +1,39 @@
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.UI;
 using UnityEngine.Events;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 
 public class SheenJoystick : MonoBehaviour
 {
-    [SerializeField] bool useJoystick; //Can the joystick component be used?
-    [SerializeField] RectTransform center; //Outer circle
-    [SerializeField] RectTransform knob; //Inner circle
-    [SerializeField] float outRange; //Determines how far the knob can be from the center
-    [SerializeField] bool fixedJoystick; //Joystick pins to a default point
-    [SerializeField] bool alwaysDisplay; //If, false makes the joystick disappear from the screen when not in use
-    Vector2 direction;
-    Vector2 fixedJoystickPosition;
-    string scriptableObjectName = "InputControllerSO";
+    [SerializeField] public bool useJoystick; //Can the joystick component be used?
+    [SerializeField] public RectTransform center; //Outer circle
+    [SerializeField] public RectTransform knob; //Inner circle
+    [SerializeField] public float outRange; //Determines how far the knob can be from the center
+    [SerializeField] public bool fixedJoystick; //Joystick pins to a default point
+    [SerializeField] public bool alwaysDisplay; //If, false makes the joystick disappear from the screen when not in use
+    public Vector2 direction;
+    public Vector2 fixedJoystickPosition;
+    public string scriptableObjectName = "InputControllerSO";
 
     [SerializeField] public UnityEvent<Vector2> OnJoystick;
 
+    private void Awake()
+    {
+        AccessJoystick();
+        LoadValuesFromScriptableObject();
+    }
+
+    private void OnEnable()
+    {
+        AccessJoystick();
+        LoadValuesFromScriptableObject();
+    }
+
     void Start()
     {
-        LoadValuesFromScriptableObject();
         fixedJoystickPosition = center.position;
         if (useJoystick)
         {
@@ -35,16 +49,11 @@ public class SheenJoystick : MonoBehaviour
     {
         if (useJoystick)
         {
-            Logic();
+            RunJoystickLogic();
         } 
     }
 
-    void OnEnable()
-    {
-        LoadValuesFromScriptableObject();
-    }
-
-    void Logic()
+    void RunJoystickLogic()
     {
         Vector2 touchPosition = Input.mousePosition;
         if (Input.GetMouseButtonDown(0))
@@ -85,7 +94,7 @@ public class SheenJoystick : MonoBehaviour
         knob.gameObject.SetActive(state);
     }
 
-    void AccessJoystick()
+    public void AccessJoystick()
     {
         Transform joystick = transform.GetChild(1);
         if (joystick)
@@ -97,8 +106,7 @@ public class SheenJoystick : MonoBehaviour
 
     public void LoadValuesFromScriptableObject()
     {
-        AccessJoystick();
-        InputControllerSOC existingSO = (InputControllerSOC)Resources.Load<InputControllerSOC>(scriptableObjectName);
+        InputControllerSO existingSO = (InputControllerSO)Resources.Load<InputControllerSO>(scriptableObjectName);
         if (existingSO)
         {
             useJoystick = existingSO.useJoystick;
@@ -112,7 +120,7 @@ public class SheenJoystick : MonoBehaviour
 
     public void SaveValuesToScriptableObject()
     {
-        InputControllerSOC existingSO = (InputControllerSOC)Resources.Load<InputControllerSOC>(scriptableObjectName);
+        InputControllerSO existingSO = (InputControllerSO)Resources.Load<InputControllerSO>(scriptableObjectName);
         if (existingSO)
         {
             existingSO.useJoystick = useJoystick;
@@ -121,12 +129,14 @@ public class SheenJoystick : MonoBehaviour
             existingSO.joystickKnobSprite = knob.GetComponent<Image>().sprite;
             existingSO.fixedJoystick = fixedJoystick;
             existingSO.alwaysDisplayJoystick = alwaysDisplay;
+            #if UNITY_EDITOR
             EditorUtility.SetDirty(existingSO); //Saves changes made to this file
+            #endif
         }
     }
-
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(SheenJoystick))]
 public class SheenJoystickEditor : Editor
 {
@@ -140,6 +150,6 @@ public class SheenJoystickEditor : Editor
             sheenJoystickScript.SaveValuesToScriptableObject();
         }
         GUILayout.Space(10);
-        //EditorGUILayout.HelpBox("You must save your changes for them to take effect.", MessageType.Info);
-    }
+    } 
 }
+#endif

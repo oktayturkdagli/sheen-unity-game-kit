@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 
 public class EventTester : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class EventTester : MonoBehaviour
 		Debug.Log("Finger touch the screen x:" + position.x + " y:" + position.y);
 	}
 
-	public void OnFingerScreen3D(Vector3 position)
+	public void HandleFingerWorld(Vector3 position)
 	{
 		Debug.Log("Finger touch the screen x:" + position.x + " y:" + position.y + "z:" + position.z);
 	}
@@ -47,3 +48,4 @@ public class EventTester : MonoBehaviour
 		Debug.Log("Joystick moved x:" + direction.x + " y:" + direction.y);
 	}
 }
+#endif

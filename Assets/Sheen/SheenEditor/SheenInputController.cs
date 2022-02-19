@@ -1,21 +1,25 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 using System.IO;
-
 
 public class SheenInputController : EditorWindow
 {
     int selectedToolbarIndex = 0;
     Texture[] standartTextures, toolbarTextures, touchpadTextures;
-    Sprite[] touchpadSprites;
+    
+    //Touch
     bool useTouch = true;
+    Sprite[] touchpadSprites;
     float tapThreshold = 0.2f;
 
+    //Joystick
     bool useJoystick = true, fixedJoystick = true, alwaysDisplayJoystick = true;
     int joystickCenterCounter = 1, joystickKnobCounter = 5;
     Texture joystickCenterTexture, joystickKnobTexture;
     float joystickOutRange = 1f;
 
+    //TODO: Optional menu will added
     //bool optionalSettingsEnable = false;
     //bool optionalToggle1 = true;
     //string optionalTextField1 = "Optional text";
@@ -42,7 +46,7 @@ public class SheenInputController : EditorWindow
         {
             default:
             case 0:
-                LogicTouchpad();
+                RunInputControllerLogic();
                 break;
             case 1:
                 Debug.Log("This is reserved for future developments.");
@@ -66,9 +70,9 @@ public class SheenInputController : EditorWindow
         }
     }
 
-    void LogicTouchpad()
+    void RunInputControllerLogic()
     {
-        //Standart
+        //Touch
         EditorGUILayout.Space();
         useTouch = EditorGUILayout.BeginToggleGroup("Touch", useTouch);
         tapThreshold = EditorGUILayout.Slider("Tap Treshold", tapThreshold, 0.01f, 1f);
@@ -115,6 +119,7 @@ public class SheenInputController : EditorWindow
         //{
         //    optionalToggle1 = EditorGUILayout.Toggle("Optional Toggle", optionalToggle1);
         //    optionalTextField1 = EditorGUILayout.TextField("Optional Text", optionalTextField1);
+        //    EditorGUILayout.HelpBox("You must save your changes for them to take effect.", MessageType.Info);
         //}
         //EditorGUILayout.EndFoldoutHeaderGroup();
         //EditorGUILayout.Space();
@@ -186,7 +191,7 @@ public class SheenInputController : EditorWindow
 
     public void LoadValuesFromScriptableObject()
     {
-        InputControllerSOC existingSO = (InputControllerSOC)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Resources/" + scriptableObjectName + ".asset", typeof(ScriptableObject));
+        InputControllerSO existingSO = (InputControllerSO)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Resources/" + scriptableObjectName + ".asset", typeof(ScriptableObject));
         if (existingSO)
         {
             useTouch = existingSO.useTouch;
@@ -202,7 +207,7 @@ public class SheenInputController : EditorWindow
 
     public void SaveValuesToScriptableObject()
     {
-        InputControllerSOC existingSO = (InputControllerSOC)Resources.Load<InputControllerSOC>(scriptableObjectName);
+        InputControllerSO existingSO = (InputControllerSO)Resources.Load<InputControllerSO>(scriptableObjectName);
         if (existingSO)
         {
             existingSO.useTouch = useTouch;
@@ -223,10 +228,10 @@ public class SheenInputController : EditorWindow
             Directory.CreateDirectory("Assets/Sheen/Resources/");
         }
 
-        InputControllerSOC existingSO = (InputControllerSOC)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Resources/" + scriptableObjectName + ".asset", typeof(ScriptableObject));
+        InputControllerSO existingSO = (InputControllerSO)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Resources/" + scriptableObjectName + ".asset", typeof(ScriptableObject));
         if (!existingSO)
         {
-            InputControllerSOC inputControllerSOC = ScriptableObject.CreateInstance<InputControllerSOC>();
+            InputControllerSO inputControllerSOC = ScriptableObject.CreateInstance<InputControllerSO>();
             AssetDatabase.CreateAsset(inputControllerSOC, "Assets/Sheen/Resources/" + scriptableObjectName + ".asset");
             AssetDatabase.SaveAssets();
             existingSO = inputControllerSOC;
@@ -254,6 +259,5 @@ public class SheenInputController : EditorWindow
         EditorUtility.FocusProjectWindow();
         Selection.activeObject = sheenTouch;
     }
-
 }
-
+#endif

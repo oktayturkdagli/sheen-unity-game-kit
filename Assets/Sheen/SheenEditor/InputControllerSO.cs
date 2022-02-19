@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class InputControllerSOC : ScriptableObject
+public class InputControllerSO : ScriptableObject
 {
     [Header("Touch")]
     [SerializeField] public bool useTouch;
@@ -13,5 +13,4 @@ public class InputControllerSOC : ScriptableObject
     [SerializeField] [Range(0.01f, 1f)] public float joystickOutRange;
     [SerializeField] public bool fixedJoystick;
     [SerializeField] public bool alwaysDisplayJoystick;
-
 }
