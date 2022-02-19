@@ -24,8 +24,8 @@ public class SheenInputController : EditorWindow
     //bool optionalToggle1 = true;
     //string optionalTextField1 = "Optional text";
 
-    string scriptableObjectName = "InputControllerSO";
-    string prefabName = "Sheen Input Controller";
+    string scriptableObjectName = "InputControllerSO"; //Name of script to save InputController data
+    string prefabName = "Sheen Input Controller"; //Name of prefab to be copied via InputController
 
     [MenuItem("Window/Sheen/Sheen Input Controller")]
     public static void Init()
@@ -41,6 +41,9 @@ public class SheenInputController : EditorWindow
 
     void OnGUI()
     {
+        //InputController consists of a triple toolbar menu
+        //But now the user can only see the first menu containing the Touchbar and Joystick features.
+        //Other options will be added in later versions
         selectedToolbarIndex = GUILayout.Toolbar(selectedToolbarIndex, toolbarTextures);
         switch (selectedToolbarIndex)
         {
@@ -66,7 +69,7 @@ public class SheenInputController : EditorWindow
         {
             CreateScriptableObject();
             CreatePrefab();
-            this.Close();
+            this.Close(); //Closes the currently open custom editor window
         }
     }
 
@@ -126,6 +129,7 @@ public class SheenInputController : EditorWindow
         //EditorGUILayout.EndFoldoutHeaderGroup();
         //EditorGUILayout.Space();
 
+        //Buttons created to select joystick UI textures
         if (buttonCL)
         {
             joystickCenterCounter--;

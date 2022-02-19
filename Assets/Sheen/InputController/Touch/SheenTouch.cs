@@ -7,13 +7,13 @@ using UnityEditor;
 public class SheenTouch : MonoBehaviour
 {   
     [SerializeField] public bool useTouch;
-    [SerializeField] [Range(0.01f, 1f)] public float tapThreshold = 0.2f;
+    [SerializeField] [Range(0.01f, 1f)] public float tapThreshold = 0.2f; //The maximum time that can pass before a down-up can be considered a tap
     [SerializeField] bool workOnHalfOfScreen; //Makes the touch work on only half of the screen
-    float[] timeTouchBegan;
-    bool[] touchDidMove;
-    float lastClickTime;
-    public string scriptableObjectName = "InputControllerSO";
-    
+    float[] timeTouchBegan; //Array of fingers starting to touch
+    bool[] touchDidMove; //Fingers moving across the screen
+    float lastClickTime;//Time elapsed since the Screen was last touched
+    public string scriptableObjectName = "InputControllerSO";//SO name to load or save data
+
     [SerializeField] public UnityEvent<int> OnFingerDown;
     [SerializeField] public UnityEvent<int> OnFingerMoved;
     [SerializeField] public UnityEvent<int> OnFingerUp;
