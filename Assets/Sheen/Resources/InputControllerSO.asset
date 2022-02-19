@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1e6acd07c1bd4aa8875bbb766dfe4a0, type: 3}
   m_Name: InputControllerSO
   m_EditorClassIdentifier: 
-  useTouch: 0
-  tapThreshold: 0
-  useJoystick: 0
-  joystickCenterSprite: {fileID: 0}
-  joystickKnobSprite: {fileID: 0}
-  joystickOutRange: 0
-  fixedJoystick: 0
-  alwaysDisplayJoystick: 0
+  useTouch: 1
+  tapThreshold: 0.2
+  workOnHalfOfScreenTouch: 1
+  useJoystick: 1
+  joystickCenterSprite: {fileID: 21300000, guid: 86f5621f453994a8aa29cb329a1dac86, type: 3}
+  joystickKnobSprite: {fileID: 21300000, guid: f6f41e8b1e0df4a91813cda12fc0a7bb, type: 3}
+  joystickOutRange: 1
+  fixedJoystick: 1
+  alwaysDisplayJoystick: 1
+  workOnHalfOfScreenJoystick: 1

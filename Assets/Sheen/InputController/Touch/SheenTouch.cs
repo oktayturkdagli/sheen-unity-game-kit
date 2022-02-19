@@ -8,6 +8,7 @@ public class SheenTouch : MonoBehaviour
 {   
     [SerializeField] public bool useTouch;
     [SerializeField] [Range(0.01f, 1f)] public float tapThreshold = 0.2f;
+    [SerializeField] bool workOnHalfOfScreen; //Makes the touch work on only half of the screen
     float[] timeTouchBegan;
     bool[] touchDidMove;
     float lastClickTime;
@@ -48,6 +49,9 @@ public class SheenTouch : MonoBehaviour
 
     void RunInputLogic()
     {
+        if (workOnHalfOfScreen && !IsItRightHalfOfScreen())
+            return;
+
         Touch();
         Mouse();
     }
@@ -160,6 +164,20 @@ public class SheenTouch : MonoBehaviour
         }
     }
 
+    bool IsItRightHalfOfScreen()
+    {
+        if (Input.mousePosition.x > Screen.width / 2)
+        {
+            return true;
+        }
+        else if (Input.mousePosition.x < Screen.width / 2)
+        {
+            return false;
+        }
+
+        return false;
+    }
+
     public void LoadValuesFromScriptableObject()
     {
         InputControllerSO existingSO = (InputControllerSO)Resources.Load<InputControllerSO>(scriptableObjectName);
@@ -167,6 +185,7 @@ public class SheenTouch : MonoBehaviour
         {
             useTouch = existingSO.useTouch;
             tapThreshold = existingSO.tapThreshold;
+            workOnHalfOfScreen = existingSO.workOnHalfOfScreenTouch;
         }
     }
 
@@ -177,6 +196,7 @@ public class SheenTouch : MonoBehaviour
         {
             existingSO.useTouch = useTouch;
             existingSO.tapThreshold = tapThreshold;
+            existingSO.workOnHalfOfScreenTouch = workOnHalfOfScreen;
             #if UNITY_EDITOR
             EditorUtility.SetDirty(existingSO); //Saves changes made to this file
             #endif

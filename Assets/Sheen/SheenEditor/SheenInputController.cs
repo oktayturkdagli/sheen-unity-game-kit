@@ -9,12 +9,12 @@ public class SheenInputController : EditorWindow
     Texture[] standartTextures, toolbarTextures, touchpadTextures;
     
     //Touch
-    bool useTouch = true;
+    bool useTouch = true, workOnHalfOfScreenTouch = true;
     Sprite[] touchpadSprites;
     float tapThreshold = 0.2f;
 
     //Joystick
-    bool useJoystick = true, fixedJoystick = true, alwaysDisplayJoystick = true;
+    bool useJoystick = true, fixedJoystick = true, alwaysDisplayJoystick = true, workOnHalfOfScreenJoystick = true;
     int joystickCenterCounter = 1, joystickKnobCounter = 5;
     Texture joystickCenterTexture, joystickKnobTexture;
     float joystickOutRange = 1f;
@@ -33,7 +33,7 @@ public class SheenInputController : EditorWindow
          GetWindow(typeof(SheenInputController));
     }
 
-    private void OnEnable()
+    void OnEnable()
     {
         TakeTextures();
         LoadValuesFromScriptableObject();
@@ -76,6 +76,7 @@ public class SheenInputController : EditorWindow
         EditorGUILayout.Space();
         useTouch = EditorGUILayout.BeginToggleGroup("Touch", useTouch);
         tapThreshold = EditorGUILayout.Slider("Tap Treshold", tapThreshold, 0.01f, 1f);
+        workOnHalfOfScreenTouch = EditorGUILayout.Toggle("Work on Only Half Of Screen", workOnHalfOfScreenTouch);
         EditorGUILayout.EndToggleGroup();
         EditorGUILayout.Space(); EditorGUILayout.Space();
 
@@ -110,6 +111,7 @@ public class SheenInputController : EditorWindow
         joystickOutRange = EditorGUILayout.Slider("Outrange", joystickOutRange, 0.01f, 1f);
         fixedJoystick = EditorGUILayout.Toggle("Fixed Joystick", fixedJoystick);
         alwaysDisplayJoystick = EditorGUILayout.Toggle("Always Display", alwaysDisplayJoystick);
+        workOnHalfOfScreenJoystick = EditorGUILayout.Toggle("Work on Only Half Of Screen", workOnHalfOfScreenJoystick);
         EditorGUILayout.EndToggleGroup();
         EditorGUILayout.Space(); EditorGUILayout.Space();
 
@@ -196,12 +198,14 @@ public class SheenInputController : EditorWindow
         {
             useTouch = existingSO.useTouch;
             tapThreshold = existingSO.tapThreshold;
+            workOnHalfOfScreenTouch = existingSO.workOnHalfOfScreenTouch;
             useJoystick = existingSO.useJoystick;
             //joystickCenterTexture = existingSO.joystickCenterTexture;
             //joystickKnobTexture = existingSO.joystickKnobTexture;
             joystickOutRange = existingSO.joystickOutRange;
             fixedJoystick = existingSO.fixedJoystick;
             alwaysDisplayJoystick = existingSO.alwaysDisplayJoystick;
+            workOnHalfOfScreenJoystick = existingSO.workOnHalfOfScreenJoystick;
         }
     }
 
@@ -212,12 +216,14 @@ public class SheenInputController : EditorWindow
         {
             existingSO.useTouch = useTouch;
             existingSO.tapThreshold = tapThreshold;
+            existingSO.workOnHalfOfScreenTouch = workOnHalfOfScreenTouch;
             existingSO.useJoystick = useJoystick;
             existingSO.joystickCenterSprite = touchpadSprites[joystickCenterCounter];
             existingSO.joystickKnobSprite = touchpadSprites[joystickKnobCounter];
             existingSO.joystickOutRange = joystickOutRange;
             existingSO.fixedJoystick = fixedJoystick;
-            existingSO.alwaysDisplayJoystick = alwaysDisplayJoystick;   
+            existingSO.alwaysDisplayJoystick = alwaysDisplayJoystick;
+            existingSO.workOnHalfOfScreenJoystick = workOnHalfOfScreenJoystick;
         }
     }
 

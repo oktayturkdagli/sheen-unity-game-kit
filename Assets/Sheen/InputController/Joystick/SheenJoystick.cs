@@ -8,15 +8,17 @@ using UnityEditor;
 
 public class SheenJoystick : MonoBehaviour
 {
-    [SerializeField] public bool useJoystick; //Can the joystick component be used?
-    [SerializeField] public RectTransform center; //Outer circle
-    [SerializeField] public RectTransform knob; //Inner circle
-    [SerializeField] public float outRange; //Determines how far the knob can be from the center
-    [SerializeField] public bool fixedJoystick; //Joystick pins to a default point
-    [SerializeField] public bool alwaysDisplay; //If, false makes the joystick disappear from the screen when not in use
-    public Vector2 direction;
-    public Vector2 fixedJoystickPosition;
-    public string scriptableObjectName = "InputControllerSO";
+    [SerializeField] bool useJoystick; //Can the joystick component be used?
+    [SerializeField] RectTransform center; //Outer circle
+    [SerializeField] RectTransform knob; //Inner circle
+    [SerializeField] float outRange; //Determines how far the knob can be from the center
+    [SerializeField] bool fixedJoystick; //Joystick pins to a default point
+    [SerializeField] bool alwaysDisplay; //If, false makes the joystick disappear from the screen when not in use
+    [SerializeField] bool workOnHalfOfScreen; //Makes the joystick work on only half of the screen
+    Vector2 direction;
+    Vector2 fixedJoystickPosition;
+    
+    string scriptableObjectName = "InputControllerSO";
 
     [SerializeField] public UnityEvent<Vector2> OnJoystick;
 
@@ -53,8 +55,27 @@ public class SheenJoystick : MonoBehaviour
         } 
     }
 
+    public void AccessJoystick()
+    {
+        Transform joystick = transform.GetChild(1);
+        if (joystick)
+        {
+            center = (RectTransform)joystick.GetChild(0).gameObject.transform;
+            knob = (RectTransform)joystick.GetChild(0).GetChild(0).gameObject.transform;
+        }
+    }
+
+    void DisplayJoystick(bool state)
+    {
+        center.gameObject.SetActive(state);
+        knob.gameObject.SetActive(state);
+    }
+
     void RunJoystickLogic()
     {
+        if (workOnHalfOfScreen && !IsItLeftHalfOfScreen())
+            return;
+
         Vector2 touchPosition = Input.mousePosition;
         if (Input.GetMouseButtonDown(0))
         {
@@ -88,20 +109,18 @@ public class SheenJoystick : MonoBehaviour
 
     }
 
-    void DisplayJoystick(bool state)
+    bool IsItLeftHalfOfScreen()
     {
-        center.gameObject.SetActive(state);
-        knob.gameObject.SetActive(state);
-    }
-
-    public void AccessJoystick()
-    {
-        Transform joystick = transform.GetChild(1);
-        if (joystick)
+        if (Input.mousePosition.x < Screen.width / 2)
         {
-            center = (RectTransform)joystick.GetChild(0).gameObject.transform;
-            knob = (RectTransform)joystick.GetChild(0).GetChild(0).gameObject.transform;
+            return true;
         }
+        else if (Input.mousePosition.x > Screen.width / 2)
+        {
+            return false;
+        }
+
+        return false;
     }
 
     public void LoadValuesFromScriptableObject()
@@ -115,6 +134,7 @@ public class SheenJoystick : MonoBehaviour
             knob.GetComponent<Image>().sprite = existingSO.joystickKnobSprite;
             fixedJoystick = existingSO.fixedJoystick;
             alwaysDisplay = existingSO.alwaysDisplayJoystick;
+            workOnHalfOfScreen = existingSO.workOnHalfOfScreenJoystick;
         }
     }
 
@@ -129,6 +149,7 @@ public class SheenJoystick : MonoBehaviour
             existingSO.joystickKnobSprite = knob.GetComponent<Image>().sprite;
             existingSO.fixedJoystick = fixedJoystick;
             existingSO.alwaysDisplayJoystick = alwaysDisplay;
+            existingSO.workOnHalfOfScreenJoystick = workOnHalfOfScreen;
             #if UNITY_EDITOR
             EditorUtility.SetDirty(existingSO); //Saves changes made to this file
             #endif
