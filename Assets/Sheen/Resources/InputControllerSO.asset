@@ -15,9 +15,9 @@ MonoBehaviour:
   useTouch: 1
   tapThreshold: 0.2
   workOnHalfOfScreenTouch: 1
-  useJoystick: 1
-  joystickCenterSprite: {fileID: 21300000, guid: 86f5621f453994a8aa29cb329a1dac86, type: 3}
-  joystickKnobSprite: {fileID: 21300000, guid: f6f41e8b1e0df4a91813cda12fc0a7bb, type: 3}
+  useJoystick: 0
+  joystickCenterSprite: {fileID: 21300000, guid: 9eb3ec31746f74787a7970e7e07af3cf, type: 3}
+  joystickKnobSprite: {fileID: 21300000, guid: 66d8f15f26ac247048ca08730c802cb5, type: 3}
   joystickOutRange: 1
   fixedJoystick: 1
   alwaysDisplayJoystick: 1
