@@ -1,18 +1,36 @@
 ﻿#if UNITY_EDITOR
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
+using System.IO;
 
 public class SheenLevelController : EditorWindow
 {
+
     [MenuItem("Window/Sheen/Sheen Level Controller")]
-    public static void Init()
+    static void Init()
     {
         GetWindow(typeof(SheenLevelController));
     }
 
-    void OnGUI()
+    void OnEnable()
     {
 
     }
+
+    void OnGUI()
+    {
+       
+    }
+
+    public void LoadValuesFromScriptableObject()
+    {
+
+    }
+
+    public void SaveValuesToScriptableObject()
+    {
+
+    }
+
 }
 #endif

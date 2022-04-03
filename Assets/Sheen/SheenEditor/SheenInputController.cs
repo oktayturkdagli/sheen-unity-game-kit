@@ -85,32 +85,48 @@ public class SheenInputController : EditorWindow
 
         //Joystick
         useJoystick = EditorGUILayout.BeginToggleGroup("Joystick", useJoystick);
+        //Joystick Visuals
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
-        GUILayout.BeginVertical(GUILayout.Height(65));GUILayout.FlexibleSpace();
-        bool buttonCL = GUILayout.Button(standartTextures[0], GUILayout.Width(25), GUILayout.Height(25));
-        GUILayout.EndVertical();
-        GUILayout.BeginVertical();
-        GUILayout.Box(" Center ");
-        GUILayout.Box(joystickCenterTexture, GUILayout.Width(50), GUILayout.Height(50));
-        GUILayout.EndVertical();
-        GUILayout.BeginVertical(GUILayout.Height(65)); GUILayout.FlexibleSpace();
-        bool buttonCR = GUILayout.Button(standartTextures[1], GUILayout.Width(25), GUILayout.Height(25));
-        GUILayout.EndVertical();
+        //Center
+        GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
-        GUILayout.BeginVertical(GUILayout.Height(65)); GUILayout.FlexibleSpace();
-        bool buttonKL = GUILayout.Button(standartTextures[0], GUILayout.Width(25), GUILayout.Height(25));
+        GUILayout.BeginVertical(GUILayout.Height(105));
+        GUILayout.FlexibleSpace(); bool buttonCL = GUILayout.Button(standartTextures[0], GUILayout.Width(25), GUILayout.Height(25)); GUILayout.FlexibleSpace();
         GUILayout.EndVertical();
-        GUILayout.BeginVertical();
-        GUILayout.Box("   Knob  ");
-        GUILayout.Box(joystickKnobTexture, GUILayout.Width(50), GUILayout.Height(50));
+        GUILayout.BeginVertical(GUILayout.Width(75));
+        GUILayout.BeginHorizontal(); GUILayout.FlexibleSpace(); GUILayout.Box("Center", GUILayout.Width(75)); GUILayout.FlexibleSpace(); GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal(); GUILayout.FlexibleSpace(); GUILayout.Box(joystickCenterTexture, GUILayout.Width(50), GUILayout.Height(50)); GUILayout.FlexibleSpace(); GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal(); GUILayout.FlexibleSpace(); GUILayout.Box(joystickCenterCounter.ToString(), GUILayout.Width(30)); GUILayout.FlexibleSpace(); GUILayout.EndHorizontal();
         GUILayout.EndVertical();
-        GUILayout.BeginVertical(GUILayout.Height(65)); GUILayout.FlexibleSpace();
-        bool buttonKR = GUILayout.Button(standartTextures[1], GUILayout.Width(25), GUILayout.Height(25));
+        GUILayout.BeginVertical(GUILayout.Height(105));
+        GUILayout.FlexibleSpace(); bool buttonCR = GUILayout.Button(standartTextures[1], GUILayout.Width(25), GUILayout.Height(25)); GUILayout.FlexibleSpace();
         GUILayout.EndVertical();
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-        EditorGUILayout.Space();
+        //Mid Space
+        GUILayout.FlexibleSpace();
+        //Knob
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        GUILayout.BeginVertical(GUILayout.Height(105));
+        GUILayout.FlexibleSpace(); bool buttonKL = GUILayout.Button(standartTextures[0], GUILayout.Width(25), GUILayout.Height(25)); GUILayout.FlexibleSpace();
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical(GUILayout.Width(75));
+        GUILayout.BeginHorizontal(); GUILayout.FlexibleSpace(); GUILayout.Box("Knob", GUILayout.Width(75)); GUILayout.FlexibleSpace(); GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal(); GUILayout.FlexibleSpace(); GUILayout.Box(joystickKnobTexture, GUILayout.Width(50), GUILayout.Height(50)); GUILayout.FlexibleSpace(); GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal(); GUILayout.FlexibleSpace(); GUILayout.Box(joystickKnobCounter.ToString(), GUILayout.Width(30)); GUILayout.FlexibleSpace(); GUILayout.EndHorizontal();
+        GUILayout.EndVertical();
+        GUILayout.BeginVertical(GUILayout.Height(105));
+        GUILayout.FlexibleSpace(); bool buttonKR = GUILayout.Button(standartTextures[1], GUILayout.Width(25), GUILayout.Height(25)); GUILayout.FlexibleSpace();
+        GUILayout.EndVertical();
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        //End Space
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        EditorGUILayout.Space(5);
+        //Joystick Visuals
         joystickOutRange = EditorGUILayout.Slider("Outrange", joystickOutRange, 0.01f, 1f);
         fixedJoystick = EditorGUILayout.Toggle("Fixed Joystick", fixedJoystick);
         alwaysDisplayJoystick = EditorGUILayout.Toggle("Always Display", alwaysDisplayJoystick);
@@ -163,36 +179,41 @@ public class SheenInputController : EditorWindow
 
     void TakeTextures()
     {
-        toolbarTextures = new Texture[1];
-        toolbarTextures[0] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_touch_black.png", typeof(Texture));
-        //toolbarTextures[1] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_keyboard_black.png", typeof(Texture));
-        //toolbarTextures[2] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_gamepad_black.png", typeof(Texture));
-
-        standartTextures = new Texture[3];
-        standartTextures[0] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/arrow_left_black.png", typeof(Texture));
-        standartTextures[1] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/arrow_right_black.png", typeof(Texture));
-        standartTextures[2] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/control_touch_black.png", typeof(Texture));
-        
-        touchpadTextures = new Texture[7];
-        touchpadTextures[0] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_1.png", typeof(Texture));
-        touchpadTextures[1] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_2.png", typeof(Texture));
-        touchpadTextures[2] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_3.png", typeof(Texture));
-        touchpadTextures[3] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_4.png", typeof(Texture));
-        touchpadTextures[4] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_5.png", typeof(Texture));
-        touchpadTextures[5] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_6.png", typeof(Texture));
-        touchpadTextures[6] = (Texture)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_7.png", typeof(Texture));
-
-        touchpadSprites = new Sprite[7];
-        touchpadSprites[0] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_1.png", typeof(Sprite));
-        touchpadSprites[1] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_2.png", typeof(Sprite));
-        touchpadSprites[2] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_3.png", typeof(Sprite));
-        touchpadSprites[3] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_4.png", typeof(Sprite));
-        touchpadSprites[4] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_5.png", typeof(Sprite));
-        touchpadSprites[5] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_6.png", typeof(Sprite));
-        touchpadSprites[6] = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Images/Joysticks/joystick_texture_7.png", typeof(Sprite));
+        toolbarTextures = BringTexture("Assets/Sheen/Images/Input/Toolbar/");
+        standartTextures = BringTexture("Assets/Sheen/Images/Arrows/");
+        touchpadTextures = BringTexture("Assets/Sheen/Images/Input/Joysticks/");
+        touchpadSprites = BringSprite("Assets/Sheen/Images/Input/Joysticks/");
 
         joystickCenterTexture = touchpadTextures[joystickCenterCounter];
         joystickKnobTexture = touchpadTextures[joystickKnobCounter];
+    }
+
+    Texture[] BringTexture(string path)
+    {
+        DirectoryInfo directory = new DirectoryInfo(@path); //Assuming Test is your Folder
+        FileInfo[] files = directory.GetFiles("*.png"); //Getting png files
+        Texture[] textures = new Texture[files.Length];
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            textures[i] = (Texture)AssetDatabase.LoadAssetAtPath(path + files[i].Name, typeof(Texture));
+        }
+
+        return textures;
+    }
+
+    Sprite[] BringSprite(string path)
+    {
+        DirectoryInfo directory = new DirectoryInfo(@path); //Assuming Test is your Folder
+        FileInfo[] files = directory.GetFiles("*.png"); //Getting png files
+        Sprite[] sprites = new Sprite[files.Length];
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            sprites[i] = (Sprite)AssetDatabase.LoadAssetAtPath(path + files[i].Name, typeof(Sprite));
+        }
+
+        return sprites;
     }
 
     public void LoadValuesFromScriptableObject()
