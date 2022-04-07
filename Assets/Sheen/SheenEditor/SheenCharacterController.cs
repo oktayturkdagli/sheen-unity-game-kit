@@ -25,7 +25,9 @@ public class SheenCharacterController : EditorWindow
     [MenuItem("Window/Sheen/Sheen Character Controller")]
     static void Init()
     {
-        GetWindow(typeof(SheenCharacterController));
+        EditorWindow editorWindow = GetWindow(typeof(SheenCharacterController), false, "Character Controller", true);
+        editorWindow.minSize = new Vector2(350, 550);
+        editorWindow.maxSize = new Vector2(350, 550);
     }
 
     void OnEnable()

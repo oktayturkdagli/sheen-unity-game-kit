@@ -30,7 +30,9 @@ public class SheenInputController : EditorWindow
     [MenuItem("Window/Sheen/Sheen Input Controller")]
     public static void Init()
     {
-         GetWindow(typeof(SheenInputController));
+        EditorWindow editorWindow = GetWindow(typeof(SheenInputController), false, "Input Controller", true);
+        editorWindow.minSize = new Vector2(350, 500);
+        editorWindow.maxSize = new Vector2(350, 500);
     }
 
     void OnEnable()
