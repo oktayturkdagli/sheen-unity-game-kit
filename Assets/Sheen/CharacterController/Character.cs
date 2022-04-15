@@ -36,21 +36,6 @@ public class Character : MonoBehaviour
         LoadValuesFromScriptableObject();
     }
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
-    void RunCharacterLogic()
-    {
-
-    }
-
     public void AccessCharacter()
     {
         Transform characterReference = transform.GetChild(0);

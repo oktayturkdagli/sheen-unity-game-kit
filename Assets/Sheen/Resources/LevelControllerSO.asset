@@ -9,13 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43c499efcad2045e4a5db33b90be4954, type: 3}
+  m_Script: {fileID: 11500000, guid: 2eea465b11b524f9f921b78337be95a4, type: 3}
   m_Name: LevelControllerSO
   m_EditorClassIdentifier: 
-  gender: 0
-  hair: 0
-  eyebrows: 0
-  chest: 0
-  arms: 0
-  legs: 0
-  feet: 0
+  direction: 
+  dropDown1Selection: 2
+  dropDown2Selection: 0
+  dropDown3Selection: 1
+  dropDown4Selection: 0
+  startSegment: []
+  midSegment: []
+  finalSegment: []
+  startSegmentUnit: 3
+  midSegmentUnit: 3
+  finalSegmentUnit: 3

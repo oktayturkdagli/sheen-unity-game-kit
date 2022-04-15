@@ -7,28 +7,34 @@ using System.Collections.Generic;
 public class SheenLevelController : EditorWindow
 {
     Texture[] placeHolderTextures;
-    Texture placeHolder1;
-    int placeHolderCounter = 0;
 
     string scriptableObjectName = "LevelControllerSO"; //Name of script to save InputController data
     string prefabName = "Sheen Level Controller"; //Name of prefab to be copied via InputController
     
-    string[] dropDown1Items = new string[] { "Path1", "Path2", "Path3", "Path4" };
-    string[] dropDown2Items = new string[] { "Random", "Order" };
+    string[] dropDown1Items = new string[] { "X Direction", "Y Direction", "Z Direction" };
+    string[] dropDown2Items = new string[] { "Order", "Random" };
     int dropDown1Selection = 0;
     int dropDown2Selection = 0;
     int dropDown3Selection = 0;
     int dropDown4Selection = 0;
-    List<float> sliders = new List<float>(new float[100]);
-
     int startSegmentUnit = 0, midSegmentUnit = 0, finalSegmentUnit = 0;
+
+    List<GameObject> startSegment = new List<GameObject>();
+    List<GameObject> midSegment = new List<GameObject>();
+    List<GameObject> finalSegment = new List<GameObject>();
+    List<bool> startSegmentButtons = new List<bool>(new bool[100]);
+    List<bool> midSegmentButtons = new List<bool>(new bool[100]);
+    List<bool> finalSegmentButtons = new List<bool>(new bool[100]);
+
+    Editor gameObjectEditor;
+    Vector2 scroll1Position, scroll2Position, scroll3Position;
 
     [MenuItem("Window/Sheen/Sheen Level Controller")]
     static void Init()
     {
         EditorWindow editorWindow = GetWindow(typeof(SheenLevelController), false, "Level Controller", true);
-        editorWindow.minSize = new Vector2(500, 650);
-        editorWindow.maxSize = new Vector2(500, 650);
+        editorWindow.minSize = new Vector2(520, 650);
+        editorWindow.maxSize = new Vector2(520, 650);
     }
 
     void OnEnable()
@@ -40,9 +46,12 @@ public class SheenLevelController : EditorWindow
     void OnGUI()
     {
         RunLevelControllerLogic();
+
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+
         //Build Button
         EditorGUILayout.Space(); EditorGUILayout.Space();
-        GUILayout.BeginHorizontal(); GUILayout.FlexibleSpace();
         bool buttonBuild = GUILayout.Button(" Build ");
         GUILayout.EndHorizontal();
         if (buttonBuild)
@@ -55,7 +64,6 @@ public class SheenLevelController : EditorWindow
 
     void RunLevelControllerLogic()
     {
-        int sliderCounter = 0;
         float originalLabelValue = EditorGUIUtility.labelWidth;
         EditorGUILayout.Space(10);
         GUILayout.Label("Level Controller", EditorStyles.boldLabel);
@@ -63,126 +71,88 @@ public class SheenLevelController : EditorWindow
 
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
-        GUILayout.BeginVertical();
+        GUILayout.BeginVertical(); 
 
         //Path
         GUILayout.BeginVertical();
-        GUILayout.BeginHorizontal(); //Dropdown menu
+        GUILayout.BeginHorizontal(GUILayout.Width(500), GUILayout.ExpandWidth(false)); //Dropdown menu
         EditorGUIUtility.labelWidth = 50;
-        dropDown1Selection = EditorGUILayout.Popup("Path", dropDown1Selection, dropDown1Items, GUILayout.ExpandWidth(false), GUILayout.Width(125));
+        dropDown1Selection = EditorGUILayout.Popup("Direction", dropDown1Selection, dropDown1Items, GUILayout.ExpandWidth(false), GUILayout.Width(150));
         EditorGUIUtility.labelWidth = originalLabelValue;  GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.Width(500), GUILayout.Height(100));//Image
-        GUILayout.FlexibleSpace();
-        GUILayout.BeginVertical(); GUILayout.FlexibleSpace();
-        GUILayout.Box(placeHolder1, GUILayout.Width(490), GUILayout.Height(90), GUILayout.ExpandWidth(true)); 
-        GUILayout.FlexibleSpace(); GUILayout.EndVertical();
-        GUILayout.FlexibleSpace();
-        GUILayout.EndHorizontal();
+        EditorGUILayout.Space(3);
+        //GUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.Width(500), GUILayout.Height(100));//Image
+        //GUILayout.FlexibleSpace();
+        //GUILayout.BeginVertical(); GUILayout.FlexibleSpace();
+        //GUILayout.Box(placeHolderTextures[0], GUILayout.Width(490), GUILayout.Height(90), GUILayout.ExpandWidth(true)); 
+        //GUILayout.FlexibleSpace(); GUILayout.EndVertical();
+        //GUILayout.FlexibleSpace();
+        //GUILayout.EndHorizontal();
         GUILayout.EndVertical();
-        EditorGUILayout.Space(15);
-
-
-        
+        EditorGUILayout.Space(10);
 
         //Start Segment
         GUILayout.BeginVertical();
-        GUILayout.BeginHorizontal(); //Dropdown menu
+        GUILayout.BeginHorizontal(GUILayout.Width(500), GUILayout.ExpandWidth(false)); //Dropdown menu
         EditorGUIUtility.labelWidth = 100;
         dropDown2Selection = EditorGUILayout.Popup("Start Segment", dropDown2Selection, dropDown2Items, GUILayout.ExpandWidth(false), GUILayout.Width(175));
         EditorGUIUtility.labelWidth = 30; GUILayout.FlexibleSpace();
         startSegmentUnit = EditorGUILayout.IntField("Unit", startSegmentUnit, GUILayout.Width(65));
         EditorGUIUtility.labelWidth = originalLabelValue;
         GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.Width(500), GUILayout.Height(100));//Image
-        GUILayout.BeginVertical(); GUILayout.FlexibleSpace();
+        EditorGUILayout.Space(3);
+        GUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.Width(500), GUILayout.Height(100), GUILayout.ExpandWidth(false));//Image
+        DragAndDropProcess(50, 100, startSegment);
+        GUILayout.Space(5);
+        scroll1Position = GUILayout.BeginScrollView(scroll1Position, false, false);
         GUILayout.BeginHorizontal();
-        GUILayout.BeginVertical();
-        GUILayout.Box(placeHolder1);
-        sliders[sliderCounter] = GUILayout.HorizontalSlider(sliders[sliderCounter], 0, 100); sliderCounter++;
-        GUILayout.EndVertical();
-        GUILayout.Space(5);
-        GUILayout.BeginVertical();
-        GUILayout.Box(placeHolder1);
-        sliders[sliderCounter] = GUILayout.HorizontalSlider(sliders[sliderCounter], 0, 100); sliderCounter++;
-        GUILayout.EndVertical();
-        GUILayout.Space(5);
-        GUILayout.BeginVertical();
-        GUILayout.Box(placeHolder1);
-        sliders[sliderCounter] = GUILayout.HorizontalSlider(sliders[sliderCounter], 0, 100); sliderCounter++;
-        GUILayout.EndVertical();
-        GUILayout.Space(5);
-        GUILayout.FlexibleSpace();
+        PreviewObject(50, 65, startSegment, startSegmentButtons);
         GUILayout.EndHorizontal();
-        GUILayout.FlexibleSpace(); GUILayout.EndVertical();
+        GUILayout.EndScrollView();
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
         EditorGUILayout.Space(15);
 
         //Mid Segment
         GUILayout.BeginVertical();
-        GUILayout.BeginHorizontal(); //Dropdown menu
+        GUILayout.BeginHorizontal(GUILayout.Width(500), GUILayout.ExpandWidth(false)); //Dropdown menu
         EditorGUIUtility.labelWidth = 100;
         dropDown3Selection = EditorGUILayout.Popup("Mid Segment", dropDown3Selection, dropDown2Items, GUILayout.ExpandWidth(false), GUILayout.Width(175));
         EditorGUIUtility.labelWidth = 30; GUILayout.FlexibleSpace();
         midSegmentUnit = EditorGUILayout.IntField("Unit", midSegmentUnit, GUILayout.Width(65));
         EditorGUIUtility.labelWidth = originalLabelValue;
         GUILayout.EndHorizontal();
+        EditorGUILayout.Space(3);
         GUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.Width(500), GUILayout.Height(100));//Image
-        GUILayout.BeginVertical(); GUILayout.FlexibleSpace();
+        DragAndDropProcess(50, 100, midSegment);
+        GUILayout.Space(5);
+        scroll2Position = GUILayout.BeginScrollView(scroll2Position, false, false);
         GUILayout.BeginHorizontal();
-        GUILayout.BeginVertical();
-        GUILayout.Box(placeHolder1);
-        sliders[sliderCounter] = GUILayout.HorizontalSlider(sliders[sliderCounter], 0, 100); sliderCounter++;
-        GUILayout.EndVertical();
-        GUILayout.Space(5);
-        GUILayout.BeginVertical();
-        GUILayout.Box(placeHolder1);
-        sliders[sliderCounter] = GUILayout.HorizontalSlider(sliders[sliderCounter], 0, 100); sliderCounter++;
-        GUILayout.EndVertical();
-        GUILayout.Space(5);
-        GUILayout.BeginVertical();
-        GUILayout.Box(placeHolder1);
-        sliders[sliderCounter] = GUILayout.HorizontalSlider(sliders[sliderCounter], 0, 100); sliderCounter++;
-        GUILayout.EndVertical();
-        GUILayout.Space(5);
-        GUILayout.FlexibleSpace();
+        PreviewObject(50, 65, midSegment, midSegmentButtons);
         GUILayout.EndHorizontal();
-        GUILayout.FlexibleSpace(); GUILayout.EndVertical();
+        GUILayout.EndScrollView();
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
         EditorGUILayout.Space(15);
 
         //Final Segment
         GUILayout.BeginVertical();
-        GUILayout.BeginHorizontal(); //Dropdown menu
+        GUILayout.BeginHorizontal(GUILayout.Width(500), GUILayout.ExpandWidth(false)); //Dropdown menu
         EditorGUIUtility.labelWidth = 100;
         dropDown4Selection = EditorGUILayout.Popup("Final Segment", dropDown4Selection, dropDown2Items, GUILayout.ExpandWidth(false), GUILayout.Width(175));
         EditorGUIUtility.labelWidth = 30; GUILayout.FlexibleSpace();
         finalSegmentUnit = EditorGUILayout.IntField("Unit", finalSegmentUnit, GUILayout.Width(65));
         EditorGUIUtility.labelWidth = originalLabelValue;
         GUILayout.EndHorizontal();
+        EditorGUILayout.Space(3);
         GUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.Width(500), GUILayout.Height(100));//Image
-        GUILayout.BeginVertical(); GUILayout.FlexibleSpace();
+        DragAndDropProcess(50, 100, finalSegment);
+        GUILayout.Space(5);
+        scroll3Position = GUILayout.BeginScrollView(scroll3Position, false, false);
         GUILayout.BeginHorizontal();
-        GUILayout.BeginVertical();
-        GUILayout.Box(placeHolder1);
-        sliders[sliderCounter] = GUILayout.HorizontalSlider(sliders[sliderCounter], 0, 100); sliderCounter++;
-        GUILayout.EndVertical();
-        GUILayout.Space(5);
-        GUILayout.BeginVertical();
-        GUILayout.Box(placeHolder1);
-        sliders[sliderCounter] = GUILayout.HorizontalSlider(sliders[sliderCounter], 0, 100); sliderCounter++;
-        GUILayout.EndVertical();
-        GUILayout.Space(5);
-        GUILayout.BeginVertical();
-        GUILayout.Box(placeHolder1);
-        sliders[sliderCounter] = GUILayout.HorizontalSlider(sliders[sliderCounter], 0, 100); sliderCounter++;
-        GUILayout.EndVertical();
-        GUILayout.Space(5);
-        GUILayout.FlexibleSpace();
+        PreviewObject(60, 65, finalSegment, finalSegmentButtons);
         GUILayout.EndHorizontal();
-        GUILayout.FlexibleSpace(); GUILayout.EndVertical();
+        GUILayout.EndScrollView();
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
         EditorGUILayout.Space(15);
@@ -196,8 +166,7 @@ public class SheenLevelController : EditorWindow
 
     void TakeTextures()
     {
-        placeHolderTextures = BringTexture("Assets/Sheen/Images/Level/PlaceHolder/");
-        placeHolder1 = placeHolderTextures[placeHolderCounter];
+        placeHolderTextures = BringTexture("Assets/Sheen/Images/Level/PlaceHolders/");
     }
 
     Texture[] BringTexture(string path)
@@ -216,12 +185,38 @@ public class SheenLevelController : EditorWindow
 
     public void LoadValuesFromScriptableObject()
     {
-        
+        LevelControllerSO existingSO = (LevelControllerSO)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Resources/" + scriptableObjectName + ".asset", typeof(ScriptableObject));
+        if (existingSO)
+        {
+            dropDown1Selection = existingSO.dropDown1Selection;
+            dropDown2Selection = existingSO.dropDown2Selection;
+            dropDown3Selection = existingSO.dropDown3Selection;
+            dropDown4Selection = existingSO.dropDown4Selection;
+            startSegment = existingSO.startSegment;
+            midSegment = existingSO.midSegment;
+            finalSegment = existingSO.finalSegment;
+            startSegmentUnit = existingSO.startSegmentUnit;
+            midSegmentUnit = existingSO.midSegmentUnit;
+            finalSegmentUnit = existingSO.finalSegmentUnit;
+        }
     }
 
     public void SaveValuesToScriptableObject()
     {
-        
+        LevelControllerSO existingSO = (LevelControllerSO)Resources.Load<LevelControllerSO>(scriptableObjectName);
+        if (existingSO)
+        {
+            existingSO.dropDown1Selection = dropDown1Selection;
+            existingSO.dropDown2Selection = dropDown2Selection;
+            existingSO.dropDown3Selection = dropDown3Selection;
+            existingSO.dropDown4Selection = dropDown4Selection;
+            existingSO.startSegment = startSegment;
+            existingSO.midSegment = midSegment;
+            existingSO.finalSegment = finalSegment;
+            existingSO.startSegmentUnit = startSegmentUnit;
+            existingSO.midSegmentUnit = midSegmentUnit;
+            existingSO.finalSegmentUnit = finalSegmentUnit;
+        }
     }
 
     void CreateScriptableObject()
@@ -231,10 +226,10 @@ public class SheenLevelController : EditorWindow
             Directory.CreateDirectory("Assets/Sheen/Resources/");
         }
 
-        CharacterControllerSO existingSO = (CharacterControllerSO)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Resources/" + scriptableObjectName + ".asset", typeof(ScriptableObject));
+        LevelControllerSO existingSO = (LevelControllerSO)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Resources/" + scriptableObjectName + ".asset", typeof(ScriptableObject));
         if (!existingSO)
         {
-            CharacterControllerSO levelControllerSOC = ScriptableObject.CreateInstance<CharacterControllerSO>();
+            LevelControllerSO levelControllerSOC = ScriptableObject.CreateInstance<LevelControllerSO>();
             AssetDatabase.CreateAsset(levelControllerSOC, "Assets/Sheen/Resources/" + scriptableObjectName + ".asset");
             AssetDatabase.SaveAssets();
             existingSO = levelControllerSOC;
@@ -255,10 +250,91 @@ public class SheenLevelController : EditorWindow
         }
 
         level.LoadValuesFromScriptableObject();
-
+        level.Build();
         EditorUtility.FocusProjectWindow();
         Selection.activeObject = level;
     }
 
+    void DragAndDropProcess(float width, float height, List<GameObject> segmentType)
+    {
+        Event evt = Event.current;
+        Rect dropArea = GUILayoutUtility.GetRect(width, height, GUILayout.ExpandWidth(false));
+        GUI.Box(dropArea, placeHolderTextures[1]);
+
+        switch (evt.type)
+        {
+            case EventType.DragUpdated:
+            case EventType.DragPerform:
+                if (!dropArea.Contains(evt.mousePosition))
+                    return;
+
+                DragAndDrop.visualMode = DragAndDropVisualMode.Copy;
+
+                if (evt.type == EventType.DragPerform)
+                {
+                    DragAndDrop.AcceptDrag();
+
+                    for (int i = 0; i < DragAndDrop.objectReferences.Length; i++)
+                    {
+                        Object obj = DragAndDrop.objectReferences[i];
+                        GameObject gameobj = (GameObject)DragAndDrop.objectReferences[i];
+
+                        string path = DragAndDrop.paths[i];
+                        segmentType.Add(gameobj);
+                        
+                        //Debug.Log(gameobj.name);
+                        //Debug.Log(path);
+
+                    }
+                }
+                break;
+        }
+    }
+
+    void PreviewObject(float width, float height, List<GameObject> segmentType, List<bool> segmentButtons)
+    {
+        for (int i = 0; i < segmentType.Count; i++)
+        {
+            GUIStyle labelStyle = new GUIStyle();
+            labelStyle.normal.background = Texture2D.grayTexture;
+
+            GUIStyle buttonStyle = new GUIStyle();
+            buttonStyle.normal.background = (Texture2D)placeHolderTextures[3];
+
+            if (segmentType[i] != null)
+            {
+                if (gameObjectEditor == null)
+                    gameObjectEditor = Editor.CreateEditor(segmentType[i]);
+                
+                GUILayout.Space(5);
+                GUILayout.BeginVertical(GUILayout.Width(width), GUILayout.Height(70));
+                GUILayout.BeginHorizontal(buttonStyle);
+                gameObjectEditor.OnInteractivePreviewGUI(GUILayoutUtility.GetRect(width-20, height), buttonStyle);
+                segmentButtons[i] = GUILayout.Button("x", GUILayout.Width(20));
+                if (segmentButtons[i]) { HideObject(segmentType, i); i = 0; }
+                if (segmentType.Count < 1) break;
+                GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal(); GUILayout.FlexibleSpace(); GUILayout.Label(segmentType[i].name, labelStyle); GUILayout.FlexibleSpace(); GUILayout.EndHorizontal();
+                GUILayout.FlexibleSpace();
+                GUILayout.EndVertical();
+                GUILayout.Space(5);
+            }
+        }
+    }
+
+    void HideObject(List<GameObject> segmentType, int index)
+    {
+        if (segmentType.Count <= index)
+            return;
+
+        segmentType.RemoveAt(index);
+        Debug.Log("Segment " + index + " removed.");
+
+        int segmentButtonsCount = startSegmentButtons.Count;
+        for (int i = 0; i < segmentButtonsCount; i++)
+        {
+            startSegmentButtons[i] = false;
+        }
+    }
 }
 #endif
