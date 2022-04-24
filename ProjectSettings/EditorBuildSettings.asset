@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SheenSceen.unity
+    path: Assets/Sheen/Scenes/ExampleScene.unity
     guid: 0cb3310f2f62047c984490c62a522749
   m_configObjects: {}

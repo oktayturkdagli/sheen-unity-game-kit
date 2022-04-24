@@ -28,6 +28,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4953702523160578404}
   m_Father: {fileID: 4953702522916923826}
@@ -35,8 +36,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -640, y: -192}
-  m_SizeDelta: {x: 200, y: 200}
+  m_AnchoredPosition: {x: -640, y: -765}
+  m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4953702521785476312
 CanvasRenderer:
@@ -105,6 +106,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4953702522254339644}
   - {fileID: 4953702522916923826}
@@ -125,6 +127,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useTouch: 1
   tapThreshold: 0.2
+  workOnHalfOfScreen: 1
+  scriptableObjectName: InputControllerSO
   OnFingerDown:
     m_PersistentCalls:
       m_Calls: []
@@ -146,7 +150,7 @@ MonoBehaviour:
   OnFingerScreen:
     m_PersistentCalls:
       m_Calls: []
-  OnFingerScreen3D:
+  OnFingerWorld:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &4953702522242314053
@@ -161,17 +165,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45620e7b3ff6440059a151b24c40b5ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useJoystick: 0
+  useJoystick: 1
   center: {fileID: 4953702521785476314}
   knob: {fileID: 4953702523160578404}
   outRange: 1
   fixedJoystick: 1
   alwaysDisplay: 1
+  workOnHalfOfScreen: 1
   OnJoystick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 508589809}
-        m_TargetAssemblyTypeName: EventTester, Assembly-CSharp
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: CharacterTester, Assembly-CSharp
         m_MethodName: HandleJoystick
         m_Mode: 0
         m_Arguments:
@@ -223,6 +228,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4953702523166437131}
   - {fileID: 4953702522809129903}
@@ -323,6 +329,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4953702522254339644}
   m_RootOrder: 1
@@ -403,6 +410,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4953702521785476314}
   m_Father: {fileID: 4953702522242314054}
@@ -502,6 +510,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4953702521785476314}
   m_RootOrder: 0
@@ -509,7 +518,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4953702523160578402
 CanvasRenderer:
@@ -539,7 +548,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 733e0708654e34fc18466f04d38ec3c0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f6f41e8b1e0df4a91813cda12fc0a7bb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -577,6 +586,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4953702522254339644}
   m_RootOrder: 0
