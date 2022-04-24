@@ -4,8 +4,6 @@ using System.Collections.Generic;
 public class LevelControllerSO : ScriptableObject
 {
     [Header("Level Controller")]
-    [SerializeField] public string direction;
-    [SerializeField] [Range(0, 3)] public int dropDown1Selection;
     [SerializeField] [Range(0, 1)] public int dropDown2Selection;
     [SerializeField] [Range(0, 1)] public int dropDown3Selection;
     [SerializeField] [Range(0, 1)] public int dropDown4Selection;

@@ -7,7 +7,6 @@ using UnityEditor;
 
 public class Level : MonoBehaviour
 {
-    [SerializeField] int dropDown1Selection = 0;
     [SerializeField] int dropDown2Selection = 0;
     [SerializeField] int dropDown3Selection = 0;
     [SerializeField] int dropDown4Selection = 0;
@@ -35,23 +34,7 @@ public class Level : MonoBehaviour
         for (int i = 0; i < parentChildCount; i++)
             DestroyImmediate(parent.GetChild(0).gameObject);
 
-        Vector3 direction = Vector3.forward;
         Vector3 position = Vector3.zero;
-        switch (dropDown1Selection)
-        {
-            case 1:
-                direction = Vector3.up;
-                break;
-            case 2:
-                direction = Vector3.forward;
-                break;
-            case 3:
-                direction = Vector3.right;
-                break;
-            default:
-                direction = Vector3.right;
-                break;
-        }
 
         int startCounter = -1;
         for (int i = 0; i < startSegmentUnit; i++)
@@ -67,8 +50,8 @@ public class Level : MonoBehaviour
             if (dropDown2Selection == 1)
                 startCounter = Random.Range(0, startSegment.Count);
 
+            position = SetPosition(startSegment[startCounter].transform);
             Instantiate(startSegment[startCounter], position, Quaternion.identity, parent);
-            position += direction * 10;
         }
 
         int midCounter = -1;
@@ -85,8 +68,8 @@ public class Level : MonoBehaviour
             if (dropDown3Selection == 1)
                 midCounter = Random.Range(0, midSegment.Count);
 
+            position = SetPosition(midSegment[midCounter].transform);
             Instantiate(midSegment[midCounter], position, Quaternion.identity, parent);
-            position += direction * 10;
         }
 
         int finalCounter = -1;
@@ -103,9 +86,24 @@ public class Level : MonoBehaviour
             if (dropDown4Selection == 1)
                 finalCounter = Random.Range(0, finalSegment.Count);
 
+            position = SetPosition(finalSegment[finalCounter].transform);
             Instantiate(finalSegment[finalCounter], position, Quaternion.identity, parent);
-            position += direction * 10;
         }
+    }
+
+    Vector3 SetPosition(Transform segment)
+    {
+        if (transform.childCount < 1)
+            return Vector3.zero;
+
+        Transform lastSegment = transform.GetChild(transform.childCount - 1);
+        Transform lastSegmentEnd = lastSegment.GetChild(1);
+        Vector3 lastSegmentGlobalEndPosition = lastSegment.position + lastSegmentEnd.localPosition;
+
+        Transform start = segment.GetChild(0);
+        Vector3 globalStartPosition = lastSegmentGlobalEndPosition - start.localPosition;
+
+        return globalStartPosition;
     }
 
     public void LoadValuesFromScriptableObject()
@@ -113,7 +111,6 @@ public class Level : MonoBehaviour
         LevelControllerSO existingSO = (LevelControllerSO)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Resources/" + scriptableObjectName + ".asset", typeof(ScriptableObject));
         if (existingSO)
         {
-            dropDown1Selection = existingSO.dropDown1Selection;
             dropDown2Selection = existingSO.dropDown2Selection;
             dropDown3Selection = existingSO.dropDown3Selection;
             dropDown4Selection = existingSO.dropDown4Selection;

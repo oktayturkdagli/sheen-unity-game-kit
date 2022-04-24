@@ -11,9 +11,7 @@ public class SheenLevelController : EditorWindow
     string scriptableObjectName = "LevelControllerSO"; //Name of script to save InputController data
     string prefabName = "Sheen Level Controller"; //Name of prefab to be copied via InputController
     
-    string[] dropDown1Items = new string[] { "X Direction", "Y Direction", "Z Direction" };
-    string[] dropDown2Items = new string[] { "Order", "Random" };
-    int dropDown1Selection = 0;
+    string[] dropDownItems = new string[] { "Order", "Random" };
     int dropDown2Selection = 0;
     int dropDown3Selection = 0;
     int dropDown4Selection = 0;
@@ -73,29 +71,11 @@ public class SheenLevelController : EditorWindow
         GUILayout.FlexibleSpace();
         GUILayout.BeginVertical(); 
 
-        //Path
-        GUILayout.BeginVertical();
-        GUILayout.BeginHorizontal(GUILayout.Width(500), GUILayout.ExpandWidth(false)); //Dropdown menu
-        EditorGUIUtility.labelWidth = 50;
-        dropDown1Selection = EditorGUILayout.Popup("Direction", dropDown1Selection, dropDown1Items, GUILayout.ExpandWidth(false), GUILayout.Width(150));
-        EditorGUIUtility.labelWidth = originalLabelValue;  GUILayout.FlexibleSpace();
-        GUILayout.EndHorizontal();
-        EditorGUILayout.Space(3);
-        //GUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.Width(500), GUILayout.Height(100));//Image
-        //GUILayout.FlexibleSpace();
-        //GUILayout.BeginVertical(); GUILayout.FlexibleSpace();
-        //GUILayout.Box(placeHolderTextures[0], GUILayout.Width(490), GUILayout.Height(90), GUILayout.ExpandWidth(true)); 
-        //GUILayout.FlexibleSpace(); GUILayout.EndVertical();
-        //GUILayout.FlexibleSpace();
-        //GUILayout.EndHorizontal();
-        GUILayout.EndVertical();
-        EditorGUILayout.Space(10);
-
         //Start Segment
         GUILayout.BeginVertical();
         GUILayout.BeginHorizontal(GUILayout.Width(500), GUILayout.ExpandWidth(false)); //Dropdown menu
         EditorGUIUtility.labelWidth = 100;
-        dropDown2Selection = EditorGUILayout.Popup("Start Segment", dropDown2Selection, dropDown2Items, GUILayout.ExpandWidth(false), GUILayout.Width(175));
+        dropDown2Selection = EditorGUILayout.Popup("Start Segment", dropDown2Selection, dropDownItems, GUILayout.ExpandWidth(false), GUILayout.Width(175));
         EditorGUIUtility.labelWidth = 30; GUILayout.FlexibleSpace();
         startSegmentUnit = EditorGUILayout.IntField("Unit", startSegmentUnit, GUILayout.Width(65));
         EditorGUIUtility.labelWidth = originalLabelValue;
@@ -117,7 +97,7 @@ public class SheenLevelController : EditorWindow
         GUILayout.BeginVertical();
         GUILayout.BeginHorizontal(GUILayout.Width(500), GUILayout.ExpandWidth(false)); //Dropdown menu
         EditorGUIUtility.labelWidth = 100;
-        dropDown3Selection = EditorGUILayout.Popup("Mid Segment", dropDown3Selection, dropDown2Items, GUILayout.ExpandWidth(false), GUILayout.Width(175));
+        dropDown3Selection = EditorGUILayout.Popup("Mid Segment", dropDown3Selection, dropDownItems, GUILayout.ExpandWidth(false), GUILayout.Width(175));
         EditorGUIUtility.labelWidth = 30; GUILayout.FlexibleSpace();
         midSegmentUnit = EditorGUILayout.IntField("Unit", midSegmentUnit, GUILayout.Width(65));
         EditorGUIUtility.labelWidth = originalLabelValue;
@@ -139,7 +119,7 @@ public class SheenLevelController : EditorWindow
         GUILayout.BeginVertical();
         GUILayout.BeginHorizontal(GUILayout.Width(500), GUILayout.ExpandWidth(false)); //Dropdown menu
         EditorGUIUtility.labelWidth = 100;
-        dropDown4Selection = EditorGUILayout.Popup("Final Segment", dropDown4Selection, dropDown2Items, GUILayout.ExpandWidth(false), GUILayout.Width(175));
+        dropDown4Selection = EditorGUILayout.Popup("Final Segment", dropDown4Selection, dropDownItems, GUILayout.ExpandWidth(false), GUILayout.Width(175));
         EditorGUIUtility.labelWidth = 30; GUILayout.FlexibleSpace();
         finalSegmentUnit = EditorGUILayout.IntField("Unit", finalSegmentUnit, GUILayout.Width(65));
         EditorGUIUtility.labelWidth = originalLabelValue;
@@ -188,7 +168,6 @@ public class SheenLevelController : EditorWindow
         LevelControllerSO existingSO = (LevelControllerSO)AssetDatabase.LoadAssetAtPath("Assets/Sheen/Resources/" + scriptableObjectName + ".asset", typeof(ScriptableObject));
         if (existingSO)
         {
-            dropDown1Selection = existingSO.dropDown1Selection;
             dropDown2Selection = existingSO.dropDown2Selection;
             dropDown3Selection = existingSO.dropDown3Selection;
             dropDown4Selection = existingSO.dropDown4Selection;
@@ -206,7 +185,6 @@ public class SheenLevelController : EditorWindow
         LevelControllerSO existingSO = (LevelControllerSO)Resources.Load<LevelControllerSO>(scriptableObjectName);
         if (existingSO)
         {
-            existingSO.dropDown1Selection = dropDown1Selection;
             existingSO.dropDown2Selection = dropDown2Selection;
             existingSO.dropDown3Selection = dropDown3Selection;
             existingSO.dropDown4Selection = dropDown4Selection;
@@ -305,15 +283,23 @@ public class SheenLevelController : EditorWindow
             {
                 if (gameObjectEditor == null)
                     gameObjectEditor = Editor.CreateEditor(segmentType[i]);
-                
+
                 GUILayout.Space(5);
                 GUILayout.BeginVertical(GUILayout.Width(width), GUILayout.Height(70));
                 GUILayout.BeginHorizontal(buttonStyle);
-                gameObjectEditor.OnInteractivePreviewGUI(GUILayoutUtility.GetRect(width-20, height), buttonStyle);
+                gameObjectEditor.OnInteractivePreviewGUI(GUILayoutUtility.GetRect(width - 20, height), buttonStyle);
                 segmentButtons[i] = GUILayout.Button("x", GUILayout.Width(20));
-                if (segmentButtons[i]) { HideObject(segmentType, i); i = 0; }
-                if (segmentType.Count < 1) break;
+                if (segmentButtons[i]) { RemoveObject(segmentType, i); i = 0; }
                 GUILayout.EndHorizontal();
+
+                if (segmentType.Count < 1)
+                {
+                    GUILayout.FlexibleSpace();
+                    GUILayout.EndVertical();
+                    GUILayout.Space(5);
+                    break;
+                } 
+
                 GUILayout.BeginHorizontal(); GUILayout.FlexibleSpace(); GUILayout.Label(segmentType[i].name, labelStyle); GUILayout.FlexibleSpace(); GUILayout.EndHorizontal();
                 GUILayout.FlexibleSpace();
                 GUILayout.EndVertical();
@@ -322,7 +308,7 @@ public class SheenLevelController : EditorWindow
         }
     }
 
-    void HideObject(List<GameObject> segmentType, int index)
+    void RemoveObject(List<GameObject> segmentType, int index)
     {
         if (segmentType.Count <= index)
             return;
