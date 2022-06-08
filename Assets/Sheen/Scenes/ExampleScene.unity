@@ -10873,6 +10873,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sheen Level Controller
       objectReference: {fileID: 0}
+    - target: {fileID: 478040753051841047, guid: 9e66217b9eeb046eb853145f8ab99b1f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 480134768384234957, guid: 9e66217b9eeb046eb853145f8ab99b1f, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -11094,6 +11098,10 @@ PrefabInstance:
     - target: {fileID: 7015126637198408078, guid: bb2205d79f52f4d4da1cf73870d34c4a, type: 3}
       propertyPath: m_Name
       value: Sheen Character Controller
+      objectReference: {fileID: 0}
+    - target: {fileID: 7015126637198408078, guid: bb2205d79f52f4d4da1cf73870d34c4a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7761813673219845015, guid: bb2205d79f52f4d4da1cf73870d34c4a, type: 3}
       propertyPath: m_IsActive

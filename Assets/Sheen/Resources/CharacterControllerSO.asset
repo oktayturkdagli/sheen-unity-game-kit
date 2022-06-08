@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43c499efcad2045e4a5db33b90be4954, type: 3}
   m_Name: CharacterControllerSO
   m_EditorClassIdentifier: 
-  gender: 1
+  gender: 0
   hair: 1
   eyebrows: 1
   chest: 1
-  arms: 0
+  arms: 1
   legs: 1
   feet: 1

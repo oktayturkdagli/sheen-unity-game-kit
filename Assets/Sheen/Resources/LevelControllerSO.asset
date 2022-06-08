@@ -23,6 +23,6 @@ MonoBehaviour:
   - {fileID: 3626573578945226822, guid: fb917cb690e374b3698761d4edcc3ab7, type: 3}
   finalSegment:
   - {fileID: 750005611880983742, guid: 0ce31dee7925b4734b111e24c706a490, type: 3}
-  startSegmentUnit: 1
-  midSegmentUnit: 10
-  finalSegmentUnit: 1
+  startSegmentUnit: 2
+  midSegmentUnit: 12
+  finalSegmentUnit: 3

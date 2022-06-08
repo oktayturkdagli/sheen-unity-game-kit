@@ -26,7 +26,10 @@ public class CharacterTester : MonoBehaviour
         if (other.gameObject.name.Equals("diamond"))
         {
             Debug.Log("You earn 1 diamond!");
-            diamondText.text = (int.Parse((diamondText.text)) + 1).ToString();
+            if (diamondText != null)
+            {
+                diamondText.text = (int.Parse((diamondText.text)) + 1).ToString();
+            }
             Destroy(other.gameObject);
         }
     }
