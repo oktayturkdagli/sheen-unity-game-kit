@@ -1,4 +1,4 @@
-## 📋 Project Name
+## 📋 Sheen Unity Game Kit
 This is a simple hyper-casual runner game development kit.
 
 This game kit consists of 3 parts:
