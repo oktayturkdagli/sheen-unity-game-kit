@@ -23,5 +23,7 @@ The project consists of three layers: data layer, business layer and presentatio
 
 
 ## 🖼 Project Video
-https://user-images.githubusercontent.com/61520877/178058101-372fdc60-6eaa-4d9b-8681-e527f16e86fb.mp4
+https://github.com/oktayturkdagli/sheen-unity-game-kit/assets/61520877/61b7c373-8bb6-417b-8612-d24e6f63978a
+
+
 
