@@ -19,4 +19,4 @@ Level Controller is a tool that allows to create and place user-created game obj
 
 With the knowledge I learned from this package, I started working in the autonomous bus industry and developed visual tools used in the company. You can watch a small demo in the video below or check out the project on [github](https://github.com/oktayturkdagli/sheen-unity-game-kit).
 
-[![YouTube](http://i.ytimg.com/vi/p37m4h4f6Dc/hqdefault.jpg)](https://www.youtube.com/watch?v=p37m4h4f6Dc)
+https://github.com/user-attachments/assets/cc9f7f36-6379-431e-acf9-5c3f63bc57b3
