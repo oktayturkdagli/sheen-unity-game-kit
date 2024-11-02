@@ -5,7 +5,7 @@ Sheen Unity Game Kit is a simple package to create a Hyper-casual running game i
 
 ## Input Controller
 
-Input Controller, aims to produce a less detailed input controller with a clean interface and easy to use.With this controller a simple joystick is created to control the character.
+Input Controller, aims to produce a less detailed input controller with a clean interface and easy to use. With this controller a simple joystick is created to control the character.
 
 ![sugdk_input_controller](https://github.com/user-attachments/assets/bc5f0c9c-9d3d-4877-9643-8f378569607e)
 
