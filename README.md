@@ -1,27 +1,23 @@
-## 📋 Sheen Unity Game Kit
-This is a simple hyper-casual runner game development kit.
 
-This game kit consists of 3 parts:
--   First part (Input Controller), aims to produce a less detailed input controller with a clean interface and easy to use.
--   Second Part (Character Controller), creates a character by choosing from previously created objects with human bone structure and dressing that object.
--   Third part similar to Forever, Forever is a level designer that allows to arrange game objects created by the user in a regular or random order. Our Game Kit aims for almost the same thing but with an easier to use and understandable system.
-<br/><br/>
+## Overview
 
+Sheen Unity Game Kit is a simple package to create a Hyper-casual running game in less than 5 minutes. This package, which I developed as a final project at university, consists of three parts. I didn't have time to develop it for a long enough period of time, so it remained at a basic level and I learned a lot about editor coding.
 
-## 🛠 Architecture
-```mermaid
-graph LR
-A[User] --> B[User Interface]
-B --> C[Game Scene]
-B --> D[Application]
-D --> B
-D --> E[Scriptable Object]
-E --> D
-```
-The project consists of three layers: data layer, business layer and presentation layer. The data is kept on the Scriptable Object, which is a Unity object. The place where this data is processed is the business layer and includes system components. The component where the results are displayed to the end user is the presentation layer.
-<br/><br/>
+## Input Controller
 
+Input Controller, aims to produce a less detailed input controller with a clean interface and easy to use.With this controller a simple joystick is created to control the character.
 
-## 🖼 Visuals
+## Character Controller
 
-https://github.com/oktayturkdagli/sheen-unity-game-kit/assets/61520877/6570dfa6-b81b-45f0-8520-ce1fb5a081f9
+Character Controller, creates a character by choosing from previously created objects with human bone structure and dressing that object. Since I couldn't find an open source character at the time, I only set it to have/not have clothes, but it supports multiple dress changes as a substructure.
+
+## Level Controller
+
+Level Controller is a tool that allows to create and place user-created game objects in a regular or randomized order. When creating the Level Controller I was inspired by Dreamteck's [Forever](https://assetstore.unity.com/packages/tools/game-toolkits/forever-endless-runner-engine-140926?srsltid=AfmBOooRskdBf6IaRmkLSgoT43fcosHwl5p1WeFY2ygtgSH51iM4KP8M) asset, but unlike Forever, I tried to make it easier and more intuitive to use.
+
+## Results
+
+With the knowledge I learned from this package, I started working in the autonomous bus industry and developed visual tools used in the company. You can watch a small demo in the video below or check out the project on [github](https://github.com/oktayturkdagli/sheen-unity-game-kit).
+
+[![Sheen Unity Game Development Kit](https://img.youtube.com/vi/p37m4h4f6Dc/0.jpg)](https://www.youtube.com/watch?v=p37m4h4f6Dc)
+
